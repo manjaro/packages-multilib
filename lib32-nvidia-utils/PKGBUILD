@@ -5,7 +5,7 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
-pkgver=340.17
+pkgver=340.24
 pkgrel=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -15,7 +15,17 @@ options=('!strip')
 _arch='x86'
 _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 source=("http://us.download.nvidia.com/XFree86/Linux-${_arch}/${pkgver}/${_pkg}.run")
-sha256sums=('65118ee762114f47b94feb896461dc4f2f4ab31025c894a090c821ed4fa315af')
+sha256sums=('55ed96acf22b6f67ce352576e73963730eb6a404df7ee8563d7dc1984d8fb130')
+
+create_links() {
+    # create soname links
+    for _lib in $(find "${pkgdir}" -name '*.so*' | grep -v 'xorg/'); do
+        _soname=$(dirname "${_lib}")/$(readelf -d "${_lib}" | grep -Po 'SONAME.*: \[\K[^]]*' || true)
+        _base=$(echo ${_soname} | sed -r 's/(.*).so.*/\1.so/')
+        [[ -e "${_soname}" ]] || ln -s $(basename "${_lib}") "${_soname}"
+        [[ -e "${_base}" ]] || ln -s $(basename "${_soname}") "${_base}"
+    done
+}
 
 build() {
     cd "${srcdir}"
@@ -30,12 +40,9 @@ package_lib32-opencl-nvidia() {
 
     # OpenCL
     install -D -m755 "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.${pkgver}"
-    ln -s "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.1"
-    ln -s "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so"
-
     install -D -m755 "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.${pkgver}" 
-    ln -s "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.1"
-    ln -s "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so"
+
+    create_links
 
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/lib32-opencl-nvidia"
@@ -81,14 +88,7 @@ package_lib32-nvidia-utils() {
     install -D -m755 "libcuda.so.${pkgver}" "${pkgdir}/usr/lib32/libcuda.so.${pkgver}"
     install -D -m755 "libnvcuvid.so.${pkgver}" "${pkgdir}/usr/lib32/libnvcuvid.so.${pkgver}"
 
-    # create soname links
-    for _lib in $(find "${pkgdir}" -name '*.so*'); do
-        _soname="$(dirname ${_lib})/$(LC_ALL=C readelf -d "$_lib" | sed -nr 's/.*Library soname: \[(.*)\].*/\1/p')"
-        if [ ! -e "${_soname}" ]; then
-            ln -s "$(basename ${_lib})" "${_soname}"
-            ln -s "$(basename ${_soname})" "${_soname/.[0-9]*/}"
-        fi
-    done
+    create_links
 
     # Cleanup
     rm -rf "${pkgdir}"/usr/{include,share,bin}

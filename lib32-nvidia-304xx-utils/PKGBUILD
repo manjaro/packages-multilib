@@ -4,8 +4,8 @@
 _pkgbasename=nvidia-304xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-304xx-utils' 'lib32-opencl-nvidia-304xx')
-pkgver=304.121
-pkgrel=2
+pkgver=304.123
+pkgrel=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -15,10 +15,19 @@ options=('!strip')
 _arch='x86'
 _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 source=("http://us.download.nvidia.com/XFree86/Linux-${_arch}/${pkgver}/${_pkg}.run")
-sha256sums=('25ee2e45bd1f728b9de30a88575dadea210549d812944fff2026cf192ea4c52d')
+sha256sums=('d5034900173cb7195f52bd6add5bf574dfcd8868bd75c0e1793592c03b97f425')
+
+create_links() {
+    # create soname links
+    for _lib in $(find "${pkgdir}" -name '*.so*' | grep -v 'xorg/'); do
+        _soname=$(dirname "${_lib}")/$(readelf -d "${_lib}" | grep -Po 'SONAME.*: \[\K[^]]*' || true)
+        _base=$(echo ${_soname} | sed -r 's/(.*).so.*/\1.so/')
+        [[ -e "${_soname}" ]] || ln -s $(basename "${_lib}") "${_soname}"
+        [[ -e "${_base}" ]] || ln -s $(basename "${_soname}") "${_base}"
+    done
+}
 
 build() {
-    cd "${srcdir}"
     sh ${_pkg}.run --extract-only
 }
 
@@ -28,16 +37,16 @@ package_lib32-opencl-nvidia-304xx() {
     optdepends=('opencl-headers: headers necessary for OpenCL development')
     conflicts=('lib32-opencl-nvidia')
 
-    cd "${srcdir}/${_pkg}"
+    cd "${_pkg}"
 
     # OpenCL
     install -D -m755 "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.${pkgver}"
-    ln -s "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so.1"
-    ln -s "libnvidia-compiler.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-compiler.so"
-
     install -D -m755 "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.${pkgver}" 
-    ln -s "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so.1"
-    ln -s "libnvidia-opencl.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-opencl.so"
+
+    create_links
+
+    mkdir -p "${pkgdir}/usr/share/licenses"
+    ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/lib32-opencl-nvidia-304xx"
 }
 
 package_lib32-nvidia-304xx-utils() {
@@ -50,41 +59,41 @@ package_lib32-nvidia-304xx-utils() {
     replaces=('lib32-nvidia-legacy-utils' 'lib32-nvidia-304xx-libgl')
     install="${pkgname}.install"
 
-    cd "${srcdir}/${_pkg}"
+    cd "${_pkg}"
+    mkdir -p "${pkgdir}/usr/lib32"
 
     # OpenGL library
-    install -D -m755 "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so"
-    ln -s "libGL.so" "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"
-    ln -s "libGL.so" "${pkgdir}/usr/lib32/nvidia/libGL.so.1.2"
-    ln -s "libGL.so" "${pkgdir}/usr/lib32/nvidia/libGL.so.1"
+    install -D -m755 "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"
+    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.1.2"
+    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.1"
+    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so"
+
     # We have to provide symlinks to mesa, as nvidia 304xx doesn't ship them
     ln -s /usr/lib32/mesa/libEGL.so.1.0.0 "${pkgdir}/usr/lib32/nvidia/libEGL.so.${pkgver}"
     ln -s /usr/lib32/mesa/libGLESv1_CM.so.1.1.0 "${pkgdir}/usr/lib32/nvidia/libGLESv1_CM.so.${pkgver}"
     ln -s /usr/lib32/mesa/libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/nvidia/libGLESv2.so.${pkgver}"
+
     # OpenGL core library
     install -D -m755 libnvidia-glcore.so.${pkgver} "${pkgdir}/usr/lib32/libnvidia-glcore.so.${pkgver}"
+
     # XvMC
     install -D -m644 libXvMCNVIDIA.a "${pkgdir}/usr/lib32/libXvMCNVIDIA.a"
     install -D -m755 libXvMCNVIDIA.so.${pkgver} "${pkgdir}/usr/lib32/libXvMCNVIDIA.so.${pkgver}"
+
     # VDPAU
     install -D -m755 libvdpau_nvidia.so.${pkgver} "${pkgdir}/usr/lib32/vdpau/libvdpau_nvidia.so.${pkgver}"
+
     # CUDA
     install -D -m755 libcuda.so.${pkgver} "${pkgdir}/usr/lib32/libcuda.so.${pkgver}"
     install -D -m755 libnvcuvid.so.${pkgver} "${pkgdir}/usr/lib32/libnvcuvid.so.${pkgver}"
+
     # nvidia-tls library
     install -D -m755 tls/libnvidia-tls.so.${pkgver} "${pkgdir}/usr/lib32/libnvidia-tls.so.${pkgver}"
 
     install -D -m755 libnvidia-cfg.so.${pkgver} "${pkgdir}/usr/lib32/libnvidia-cfg.so.${pkgver}"
     install -D -m755 libnvidia-ml.so.${pkgver} "${pkgdir}/usr/lib32/libnvidia-ml.so.${pkgver}"
 
-    # create soname links
-    for _lib in $(find "${pkgdir}" -name '*.so*'); do
-        _soname="$(dirname ${_lib})/$(LC_ALL=C readelf -d "$_lib" | sed -nr 's/.*Library soname: \[(.*)\].*/\1/p')"
-        if [ ! -e "${_soname}" ]; then
-            ln -s "$(basename ${_lib})" "${_soname}"
-            ln -s "$(basename ${_soname})" "${_soname/.[0-9]*/}"
-        fi
-    done
+    create_links
 
     # Cleanup
     rm -rf "${pkgdir}"/usr/{include,share,bin}
@@ -94,6 +103,7 @@ package_lib32-nvidia-304xx-utils() {
     if [ -f "${pkgdir}/usr/lib32/libGL.so.1" ]; then
         rm "${pkgdir}/usr/lib32/libGL.so.1"
     fi
+
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
 }
