@@ -1,0 +1,44 @@
+# Maintainer: jtts
+# Contributor: Ionut Biru <ibiru@archlinux.org>
+
+_pkgbasename=dconf
+pkgname=lib32-$_pkgbasename
+pkgver=0.20.0
+pkgrel=3
+pkgdesc="A low-level configuration system (32-bit)."
+arch=(x86_64)
+url="http://live.gnome.org/dconf"
+license=(LGPL2.1)
+depends=(lib32-glib2 $_pkgbasename)
+makedepends=(gcc-multilib vala intltool python python2 docbook-xsl) # 'gtk3'
+#optdepends=('gtk3: for dconf-editor')
+install=dconf.install
+source=(http://download.gnome.org/sources/$_pkgbasename/${pkgver:0:4}/$_pkgbasename-$pkgver.tar.xz)
+sha256sums=('22c046a247d05ea65ad181e3aef4009c898a5531f76c0181f8ec0dfef83447d9')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd "$_pkgbasename-$pkgver"
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libdir=/usr/lib32 \
+    --libexecdir=/usr/lib32/dconf \
+    --disable-editor \
+    --disable-gtk-doc \
+    --disable-gtk-doc-html \
+    --disable-gtk-doc-pdf \
+    --disable-schemas-compile \
+    --disable-nls
+  make
+}
+
+package() {
+  cd "$_pkgbasename-$pkgver"
+  make completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+
+  # cleanup for lib32 package
+  rm -rf $pkgdir/{etc,bin,sbin,usr/{bin,lib,include,share},var}
+}
