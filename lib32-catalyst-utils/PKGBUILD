@@ -5,9 +5,9 @@
 _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
-pkgver=14.10.1006.1001
+pkgver=14.201
 pkgrel=1
-_tarball=14-4-rev2-linux-x86-x86-64-may6
+_tarball=14.201.orig
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.amd.com"
 arch=(x86_64)
@@ -16,22 +16,26 @@ groups=('lib32')
 depends=('lib32-libxext' 'lib32-libdrm' 'catalyst-utils' 'mhwd')
 conflicts=('lib32-catalyst-legacy-utils' 'lib32-catalyst-13.4-utils')
 install="${pkgname}.install"
-source=(http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}.zip
-        lib32-catalyst.sh)
-sha256sums=('93e213e5b182a0863aa926d1e3ab4498adc0e0007aac4fc14a3abae84bb170f5'
-            '1f4f611ed80e2626ef39486020a06c328c15dad76e1365a4bd553342060ff409')
+source=(#http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}.zip
+        https://launchpad.net/ubuntu/utopic/+source/fglrx-installer/2:14.201-0ubuntu1/+files/fglrx-installer_${_tarball}.tar.gz
+        lib32-catalyst.sh
+	LICENSE.TXT)
+sha256sums=('b9064fb5e15c0094162c18d0db9135c061d0e1fde31b2e63de5d3cd455a19e40'
+            '1f4f611ed80e2626ef39486020a06c328c15dad76e1365a4bd553342060ff409'
+            '4f7530540f6e1ea032746e94bd164160abdf93c15509bfb8bdbecd23bcea5c47')
 
-prepare() {
-	cd ${srcdir}/fglrx-$pkgver
-	/bin/sh ./amd-driver-installer-${pkgver}-x86.x86_64.run --extract archive_files
+#prepare() {
+#	cd ${srcdir}/fglrx-$pkgver
+#	/bin/sh ./amd-driver-installer-${pkgver}-x86.x86_64.run --extract archive_files
 	#/bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
 	#/bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
-}
+#}
 
 package_lib32-catalyst-utils() {
       cd ${srcdir}
       install -D -m755 lib32-catalyst.sh ${pkgdir}/etc/profile.d/lib32-catalyst.sh
-      cd ${srcdir}/fglrx-$pkgver/archive_files/arch/x86/usr
+      #cd ${srcdir}/fglrx-$pkgver/archive_files/arch/x86/usr
+      cd ${srcdir}/arch/x86/usr
       install -dm755 ${pkgdir}/usr/lib32
       install -dm755 ${pkgdir}/usr/lib32/fglrx
       install -dm755 ${pkgdir}/usr/lib32/xorg/modules/dri
@@ -59,7 +63,8 @@ package_lib32-catalyst-utils() {
 
       # License
       install -m755 -d ${pkgdir}/usr/share/licenses/${pkgname}
-      install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      #install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      install -m644 ${srcdir}/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
 
       # provided in lib32-opencl-catalyst package
       rm "${pkgdir}"/usr/lib32/lib{amdocl*,OpenCL}.so* 
@@ -77,11 +82,13 @@ package_lib32-opencl-catalyst() {
       install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
       
       _ARCHDIR="x86"
-      cd ${srcdir}/fglrx-$pkgver/archive_files/arch/${_ARCHDIR}
+      #cd ${srcdir}/fglrx-$pkgver/archive_files/arch/${_ARCHDIR}
+      cd ${srcdir}/arch/${_ARCHDIR}
       install -m644 etc/OpenCL/vendors/amdocl*.icd "${pkgdir}/etc/OpenCL/vendors/"
       install -m755 usr/lib/libamdocl*.so "${pkgdir}/usr/lib32/"
       install -m755 usr/lib/libOpenCL.so.1 "${pkgdir}/usr/lib32/"
       ln -s libOpenCL.so.1 "${pkgdir}/usr/lib32/libOpenCL.so"
       # license
-      install -m644 "${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT" "${pkgdir}/usr/share/licenses/${pkgname}/"
+      #install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      install -m644 ${srcdir}/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
 }
