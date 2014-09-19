@@ -30,8 +30,8 @@ prepare() {
 	#/bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
 
 	# move files
-	mkdir -p fglrx-$pkgver/common
-	mv etc lib usr fglrx-$pkgver/common
+	mkdir common
+	mv etc lib usr common
 	mkdir -p fglrx-$pkgver/archive_files
 	mv arch common xpic xpic_64a LICENSE.TXT fglrx-$pkgver/archive_files
 }
