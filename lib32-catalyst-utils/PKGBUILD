@@ -24,18 +24,22 @@ sha256sums=('b9064fb5e15c0094162c18d0db9135c061d0e1fde31b2e63de5d3cd455a19e40'
             '1f4f611ed80e2626ef39486020a06c328c15dad76e1365a4bd553342060ff409'
             '4f7530540f6e1ea032746e94bd164160abdf93c15509bfb8bdbecd23bcea5c47')
 
-#prepare() {
+prepare() {
 #	cd ${srcdir}/fglrx-$pkgver
 #	/bin/sh ./amd-driver-installer-${pkgver}-x86.x86_64.run --extract archive_files
 	#/bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
-	#/bin/sh ./amd-catalyst-${pkgver}-linux-x86.x86_64.run --extract archive_files
-#}
+
+	# move files
+	mkdir -p fglrx-$pkgver/common
+	mv etc lib usr fglrx-$pkgver/common
+	mkdir -p fglrx-$pkgver/archive_files
+	mv arch common xpic xpic_64a LICENSE.TXT fglrx-$pkgver/archive_files
+}
 
 package_lib32-catalyst-utils() {
       cd ${srcdir}
       install -D -m755 lib32-catalyst.sh ${pkgdir}/etc/profile.d/lib32-catalyst.sh
-      #cd ${srcdir}/fglrx-$pkgver/archive_files/arch/x86/usr
-      cd ${srcdir}/arch/x86/usr
+      cd ${srcdir}/fglrx-$pkgver/archive_files/arch/x86/usr
       install -dm755 ${pkgdir}/usr/lib32
       install -dm755 ${pkgdir}/usr/lib32/fglrx
       install -dm755 ${pkgdir}/usr/lib32/xorg/modules/dri
@@ -63,8 +67,7 @@ package_lib32-catalyst-utils() {
 
       # License
       install -m755 -d ${pkgdir}/usr/share/licenses/${pkgname}
-      #install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
-      install -m644 ${srcdir}/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
 
       # provided in lib32-opencl-catalyst package
       rm "${pkgdir}"/usr/lib32/lib{amdocl*,OpenCL}.so* 
@@ -82,13 +85,11 @@ package_lib32-opencl-catalyst() {
       install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
       
       _ARCHDIR="x86"
-      #cd ${srcdir}/fglrx-$pkgver/archive_files/arch/${_ARCHDIR}
-      cd ${srcdir}/arch/${_ARCHDIR}
+      cd ${srcdir}/fglrx-$pkgver/archive_files/arch/${_ARCHDIR}
       install -m644 etc/OpenCL/vendors/amdocl*.icd "${pkgdir}/etc/OpenCL/vendors/"
       install -m755 usr/lib/libamdocl*.so "${pkgdir}/usr/lib32/"
       install -m755 usr/lib/libOpenCL.so.1 "${pkgdir}/usr/lib32/"
       ln -s libOpenCL.so.1 "${pkgdir}/usr/lib32/libOpenCL.so"
       # license
-      #install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
-      install -m644 ${srcdir}/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      install -m644 ${srcdir}/fglrx-$pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
 }
