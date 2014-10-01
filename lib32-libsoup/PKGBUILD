@@ -1,0 +1,36 @@
+# Maintainer: Maximilian Stein <theoddbird@posteo.org>
+# Contributor: josephgbr <rafael.f.f1@gmail.com>
+
+_pkgbase=libsoup
+pkgname=lib32-${_pkgbase}
+pkgver=2.47.92
+pkgrel=1
+pkgdesc="GNOME HTTP Library (32 bit)"
+arch=('x86_64')
+url="http://www.gnome.org"
+license=('LGPL')
+depends=('lib32-glib2' 'lib32-libxml2' 'lib32-sqlite' "${_pkgbase}")
+makedepends=('intltool' 'gobject-introspection' 'python2' 'gcc-multilib' "${_pkgbase}")
+conflicts=(lib32-libsoup-gnome)
+replaces=(lib32-libsoup-gnome)
+options=('!libtool' '!emptydirs')
+source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbase}/2.47/${_pkgbase}-${pkgver}.tar.xz)
+sha256sums=('0680a9f90296b246d3cb3232be095f916caa25b84ea13d4eba6246de2d428348')
+
+build() {
+  export CC='gcc -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+  
+  cd ${_pkgbase}-${pkgver}
+  sed -i -e '1s/python$/&2/' libsoup/tld-parser.py
+  
+  ./configure --prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --disable-static \
+      --libdir=/usr/lib32 --disable-tls-check
+  make
+}
+
+package() {
+  make -C ${_pkgbase}-${pkgver} DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{include,share}
+}

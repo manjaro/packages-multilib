@@ -1,0 +1,39 @@
+# Maintainer:  jtts
+# Contributor:Ionut Biru <ibiru@archlinux.org> 
+
+_pkgbasename=at-spi2-atk
+pkgname=lib32-$_pkgbasename
+pkgver=2.12.1
+pkgrel=1
+pkgdesc="A GTK+ module that bridges ATK to D-Bus at-spi (32-bit)"
+arch=(x86_64)
+url="http://www.gnome.org"
+license=(GPL2)
+depends=(lib32-at-spi2-core lib32-libx11 lib32-atk $_pkgbasename)
+makedepends=(gcc-multilib intltool)
+source=(http://download.gnome.org/sources/$_pkgbasename/${pkgver:0:4}/$_pkgbasename-$pkgver.tar.xz)
+sha256sums=('5fa9c527bdec028e06797563cd52d49bcf06f638549df983424d88db89bb1336')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd $_pkgbasename-$pkgver
+
+  sed -i -e '/AC_PATH_XTRA/d' configure.ac
+  autoreconf --force --install
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libdir=/usr/lib32 \
+    --disable-schemas-compile
+  make
+}
+
+package() {
+  cd $_pkgbasename-$pkgver
+  make DESTDIR="$pkgdir" install
+
+  # cleanup for lib32 package
+  rm -rf "${pkgdir}"/usr/{include,share,lib32/gnome-settings-daemon-3.0}
+}

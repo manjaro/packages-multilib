@@ -1,0 +1,39 @@
+# Maintainer: jtts
+# Contributor: Ionut Biru <ibiru@archlinux.org>
+
+_pkgbasename=at-spi2-core
+pkgname=lib32-$_pkgbasename
+pkgver=2.12.0
+pkgrel=1
+pkgdesc="Protocol definitions and daemon for D-Bus at-spi (32-bit)"
+arch=(x86_64)
+url="http://www.gnome.org"
+license=(GPL2)
+depends=(lib32-dbus lib32-glib2 lib32-libxtst $_pkgbasename)
+makedepends=(gcc-multilib intltool gobject-introspection)
+source=(http://download.gnome.org/sources/$_pkgbasename/${pkgver:0:4}/$_pkgbasename-$pkgver.tar.xz)
+sha256sums=('db550edd98e53b4252521459c2dcaf0f3b060a9bad52489b9dbadbaedad3fb89')
+
+build() {
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  cd $_pkgbasename-$pkgver
+
+  sed -i -e '/AC_PATH_XTRA/d' configure.ac
+  autoreconf --force --install
+
+  ./configure --prefix=/usr --sysconfdir=/etc \
+    --libdir=/usr/lib32 --libexecdir=/usr/lib32/at-spi2-core \
+    --disable-xevie
+  make
+}
+
+package() {
+  cd $_pkgbasename-$pkgver
+  make DESTDIR="$pkgdir" install
+
+  # cleanup for lib32 package
+  rm -rf "${pkgdir}"/{etc,bin,sbin,usr/{bin,lib,include,share},var}
+}
