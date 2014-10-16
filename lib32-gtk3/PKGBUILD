@@ -2,7 +2,7 @@
 # Maintainer: GordonGR <ntheo1979@gmail.com>
 
 pkgname=lib32-gtk3
-pkgver=3.12.2
+pkgver=3.14.3
 pkgrel=1
 pkgdesc="GObject-based multi-platform GUI toolkit (v3) (32-bit)"
 arch=('x86_64')
@@ -14,11 +14,11 @@ depends=('lib32-atk' 'lib32-gdk-pixbuf2' 'lib32-libxcomposite'
          'lib32-pango' 'lib32-cairo' 'lib32-colord' 'lib32-glib2'
          'lib32-at-spi2-atk' 'lib32-wayland' 'lib32-libxkbcommon'
          'lib32-fontconfig' 'gtk3' 'lib32-rest' 'lib32-json-glib' )
-makedepends=('gcc-multilib' 'gobject-introspection')
+makedepends=('gcc-multilib' 'gobject-introspection' 'python2')
 options=('!libtool' '!docs')
 install=gtk3.install
 source=("http://ftp.gnome.org/pub/gnome/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz")
-md5sums=('0d6d8f9f79132b3b47475d047b369b1c')
+sha256sums=('5e8c62b932f4f0384c3c8cbf251f65978bdecde3211bb16e4c2bde5d8b3af72f')
 
 
 build() {  
@@ -46,6 +46,7 @@ package() {
   make -C gtk+-${pkgver} DESTDIR="${pkgdir}" install
   mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
   rm "${pkgdir}"/usr/bin/{broadwayd,gtk-launch} \
-     "${pkgdir}"/usr/bin/gtk3-{demo,demo-application,widget-factory}
+     "${pkgdir}"/usr/bin/gtk3-{demo,demo-application,widget-factory,icon-browser}
   rm -rf "${pkgdir}"/usr/{include,share} "${pkgdir}/etc"
+  rm -rf "${pkgdir}"/usr/bin/gtk-encode-symbolic-svg
 }
