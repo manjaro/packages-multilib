@@ -5,10 +5,10 @@
 _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
-pkgver=14.501
-pkgrel=0
-_pkgver=14.501.1003
-_tarball=omega-14.12-linux-run-installers
+pkgver=15.200
+pkgrel=1
+_pkgver=15.200
+_tarball=15.200
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.amd.com"
 arch=(x86_64)
@@ -17,24 +17,24 @@ groups=('lib32')
 depends=('lib32-libxext' 'lib32-libdrm' 'catalyst-utils' 'mhwd')
 conflicts=('lib32-catalyst-legacy-utils' 'lib32-catalyst-13.4-utils')
 install="${pkgname}.install"
-source=(http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}.zip
-    #https://launchpad.net/ubuntu/utopic/+source/fglrx-installer/2:14.201-0ubuntu1/+files/fglrx-installer_${_tarball}.tar.gz
+source=(#http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}.zip
+        https://launchpad.net/ubuntu/+archive/primary/+files/fglrx-installer_${_tarball}.orig.tar.gz
         lib32-catalyst.sh
 	LICENSE.TXT)
-sha256sums=('68669836f20ad4351e08b13c5766c6b2ffc6b8cd2a37e9baf55779da32d3a249'
+sha256sums=('a4ad20d53f790d5105351a5627fadbf02fe4945582abf2b93a337b1bbaa0b033'
             '1f4f611ed80e2626ef39486020a06c328c15dad76e1365a4bd553342060ff409'
             '4f7530540f6e1ea032746e94bd164160abdf93c15509bfb8bdbecd23bcea5c47')
 
 prepare() {
-	cd ${srcdir}/fglrx-$_pkgver
-	/bin/sh ./amd-driver-installer-${_pkgver}-x86.x86_64.run --extract archive_files
+	#cd ${srcdir}/fglrx-$_pkgver
+	#/bin/sh ./amd-driver-installer-${_pkgver}-x86.x86_64.run --extract archive_files
 	#/bin/sh ./amd-catalyst-${_pkgver}-linux-x86.x86_64.run --extract archive_files
 
 	# move files
-#	mkdir common
-#	mv etc lib usr common
-#	mkdir -p fglrx-$_pkgver/archive_files
-#	mv arch common xpic xpic_64a LICENSE.TXT fglrx-$_pkgver/archive_files
+	mkdir common
+	mv etc lib usr common
+	mkdir -p fglrx-$_pkgver/archive_files
+	mv arch common xpic xpic_64a LICENSE.TXT fglrx-$_pkgver/archive_files
 }
 
 package_lib32-catalyst-utils() {
