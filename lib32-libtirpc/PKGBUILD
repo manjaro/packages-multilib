@@ -1,36 +1,44 @@
-# Maintainer: jtts
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: jtts <jussaar@mbnet.fi>
 # Contributor: Tom Gundersen <teg@jklm.no>
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
 # Contributor: Franco Tortoriello <franco.tortoriello@gmail.com>
 # Contributor: josephgbr <rafael.f.f1@gmail.com>
 
-_pkgbasename=libtirpc
-pkgname=lib32-$_pkgbasename
-pkgver=0.2.5
+pkgname=lib32-libtirpc
+pkgver=0.3.0
 pkgrel=1
-pkgdesc="Transport Independent RPC library (SunRPC replacement) (32-bit)"
-arch=(x86_64)
-url="http://libtirpc.sourceforge.net/"
-license=(BSD)
-depends=(lib32-krb5 $_pkgbasename)
-makedepends=(gcc-multilib)
-#backup=('etc/netconfig')
-source=(http://downloads.sourceforge.net/sourceforge/libtirpc/$_pkgbasename-$pkgver.tar.bz2)
-sha256sums=('62f9de7c2c8686c568757730e1fef66502a0e00d6cacf33546d0267984e002db')
+pkgdesc='Transport Independent RPC library (SunRPC replacement) (32-bit)'
+arch=('x86_64')
+url='http://libtirpc.sourceforge.net/'
+license=('BSD')
+depends=('lib32-krb5' 'libtirpc')
+makedepends=('gcc-multilib')
+source=("http://downloads.sourceforge.net/sourceforge/libtirpc/libtirpc-${pkgver}.tar.bz2")
+sha256sums=('cafe59d561145b384bffd34d6614e9fe4c1d9157c30d2b6b022a0ef71de5a11d')
 
 build() {
-  cd "$srcdir/$_pkgbasename-$pkgver"
+  cd libtirpc-${pkgver}
 
-  ./configure --prefix=/usr --sysconf=/etc \
-	--libdir=/usr/lib32 CC="gcc -m32"
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --sysconfdir='/etc'
   make
 }
 
 package() {
-  cd "$srcdir/$_pkgbasename-$pkgver"
-  make DESTDIR="$pkgdir" install
-  rm -rf "$pkgdir"/{etc,usr/{include,share}}
-  install -dm755 "$pkgdir"/usr/share/licenses/
-  ln -s $_pkgbasename "$pkgdir"/usr/share/licenses/$pkgname
+  cd libtirpc-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/{etc,usr/{include,share}}
+
+  install -dm 755 "${pkgdir}"/usr/share/licenses
+  ln -s libtirpc "${pkgdir}"/usr/share/licenses/${pkgname}
 }
+
+# vim: ts=2 sw=2 et:

@@ -1,44 +1,48 @@
-# Maintainer: jtts
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Maintainer: jtts <jussaar@mbnet.fi>
 # Contributor: Ionut Biru <ibiru@archlinux.org>
 
-_pkgbasename=dconf
-pkgname=lib32-$_pkgbasename
-pkgver=0.22.0
+pkgname=lib32-dconf
+pkgver=0.24.0
 pkgrel=1
-pkgdesc="A low-level configuration system (32-bit)."
-arch=(x86_64)
-url="http://live.gnome.org/dconf"
-license=(LGPL2.1)
-depends=(lib32-glib2 $_pkgbasename)
-makedepends=(gcc-multilib vala intltool docbook-xsl python python2) # 'gtk3'
-#optdepends=('gtk3: for dconf-editor')
-install=dconf.install
-source=(http://download.gnome.org/sources/$_pkgbasename/${pkgver:0:4}/$_pkgbasename-$pkgver.tar.xz)
-sha256sums=('0a277cb0c3f09e77d9413c5a9b3577fc2b5d6e941b59b44940392e024a224b8e')
+pkgdesc='A low-level configuration system (32-bit)'
+arch=('x86_64')
+url='http://live.gnome.org/dconf'
+license=('LGPL2.1')
+depends=('dconf' 'lib32-glib2' 'lib32-libdbus')
+makedepends=('docbook-xsl' 'gcc-multilib' 'intltool' 'python2' 'vala')
+install='dconf.install'
+source=("http://download.gnome.org/sources/dconf/${pkgver%.*}/dconf-${pkgver}.tar.xz")
+sha256sums=('4373e0ced1f4d7d68d518038796c073696280e22957babb29feb0267c630fec2')
+
+prepare() {
+  cd dconf-${pkgver}
+
+  sed 's/ editor//g' -i Makefile.in
+}
 
 build() {
+  cd dconf-${pkgver}
+
   export CC='gcc -m32'
   export CXX='g++ -m32'
   export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
-  cd "$_pkgbasename-$pkgver"
-
-  ./configure --prefix=/usr --sysconfdir=/etc \
-    --libdir=/usr/lib32 \
-    --libexecdir=/usr/lib32/dconf \
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --libexecdir='/usr/lib32/dconf' \
     --disable-editor \
-    --disable-gtk-doc \
     --disable-gtk-doc-html \
-    --disable-gtk-doc-pdf \
-    --disable-schemas-compile \
-    --disable-nls
+    --disable-man
   make
 }
 
 package() {
-  cd "$_pkgbasename-$pkgver"
-  make completiondir=/usr/share/bash-completion/completions DESTDIR="$pkgdir" install
+  cd dconf-${pkgver}
 
-  # cleanup for lib32 package
-  rm -rf $pkgdir/{etc,bin,sbin,usr/{bin,lib,include,share},var}
+  make completiondir='/usr/share/bash-completion/completions' DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{bin,include,share}
 }
+
+# vim: ts=2 sw=2 et:

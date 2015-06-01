@@ -1,39 +1,41 @@
-# Maintainer: jtts
-# Contributor: josephgbr <rafael.f.f1 at gmail dot com>
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: jtts <jussaar@mbnet.fi>
+# Contributor: josephgbr <rafael.f.f1@gmail.com>
 # Contributor: Tobias Powalowski <tpowa@archlinux.org>
-# Contributor: Federico Quagliata (quaqo) <quaqo@despammed.com>
+# Contributor: Federico Quagliata <quaqo@despammed.com>
 
-_pkgbasename=cracklib
-pkgname=lib32-$_pkgbasename
-pkgver=2.9.1
+pkgname=lib32-cracklib
+pkgver=2.9.4
 pkgrel=1
-pkgdesc="Password Checking Library (32-bit)"
-arch=(x86_64)
-license=(GPL)
-url="http://sourceforge.net/projects/cracklib"
-depends=('lib32-glibc' 'lib32-zlib' "$_pkgbasename")
+pkgdesc='Password Checking Library (32-bit)'
+arch=('x86_64')
+url='http://sourceforge.net/projects/cracklib'
+license=('GPL')
+depends=('cracklib' 'lib32-zlib')
 makedepends=('gcc-multilib')
-source=(http://downloads.sourceforge.net/sourceforge/$_pkgbasename/$_pkgbasename-$pkgver.tar.gz)
-md5sums=('90536219c520add2ceb3c26f0d7da404')
+source=("http://downloads.sourceforge.net/sourceforge/cracklib/cracklib-${pkgver}.tar.gz")
+sha256sums=('f2a866b4b9808344228ea6d68b69e3ba9a8a99210e23dfd718d4b95c60be8958')
 
 build() {
-  cd $srcdir/$_pkgbasename-$pkgver
-  ./configure --prefix=/usr --sbindir=/usr/bin --libdir=/usr/lib32 --without-python CC='gcc -m32'
+  cd cracklib-${pkgver}
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --sbindir='/usr/bin' \
+    --without-python
   make
 }
 
-#check() {
-#  cd $srcdir/$_pkgbasename-$pkgver
-#  make check
-#}
-
 package() {
-  cd $srcdir/$_pkgbasename-$pkgver
-  make DESTDIR=$pkgdir install
-  # symlink cracklib-small #34778
-  #mkdir -p $pkgdir/usr/share/dict
-  #ln -sf /usr/share/cracklib/cracklib-small $pkgdir/usr/share/dict/cracklib-small
-  #sh ./util/cracklib-format dicts/cracklib-small \
-  #  | sh ./util/cracklib-packer $pkgdir/usr/share/cracklib/pw_dict
-  rm -rf "${pkgdir}/usr"/{include,bin,share}
+  cd cracklib-${pkgver}
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "${pkgdir}"/usr/{include,bin,share}
 }
+
+# vim: ts=2 sw=2 et:
