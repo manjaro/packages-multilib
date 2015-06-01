@@ -1,37 +1,44 @@
-# Maintainer:  Martin Wimpress <code@flexion.org>
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor:  Martin Wimpress <code@flexion.org>
 # Contributor: josephgbr <rafael.f.f1@gmail.com>
 
-_pkgname=dbus-glib
-pkgname=lib32-$_pkgname
+pkgname=lib32-dbus-glib
 pkgver=0.102
-pkgrel=1
-pkgdesc="GLib bindings for DBUS (32 bit)"
+pkgrel=2
+pkgdesc='GLib bindings for DBUS (32-bit)'
 arch=('x86_64')
 license=('GPL')
-url="http://www.freedesktop.org/wiki/Software/DBusBindings"
-depends=('lib32-glib2')
+url='http://www.freedesktop.org/wiki/Software/DBusBindings'
+depends=('dbus-glib' 'lib32-glib2')
 makedepends=('gcc-multilib')
 options=('!emptydirs')
-source=("http://dbus.freedesktop.org/releases/${_pkgname}/${_pkgname}-${pkgver}.tar.gz")
-md5sums=('f76b8558fd575d0106c3a556eaa49184')
+source=("http://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-${pkgver}.tar.gz")
+sha256sums=('6964ed585bb8149a14ab744b5ded5e77cf71ec5446e6dcc5fcf5eebcc52df29c')
 
 build() {
-    export CC='gcc -m32'
-    export CXX='g++ -m32'
+  cd dbus-glib-${pkgver}
 
-    cd ${_pkgname}-${pkgver}
-    ./configure \
-        --prefix=/usr \
-        --libdir=/usr/lib32 \
-        --localstatedir=/var \
-        --sysconfdir=/etc \
-        --enable-static=no \
-        --enable-bash-completion=no
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32' \
+    --localstatedir='/var' \
+    --sysconfdir='/etc' \
+    --disable-bash-completion \
+    --disable-checks \
+    --disable-gtk-doc-html \
+    --disable-static
   make
 }
 
 package() {
-  cd ${_pkgname}-${pkgver}
+  cd dbus-glib-${pkgver}
+
   make DESTDIR="${pkgdir}" install
   rm -rf "${pkgdir}/usr"/{bin,include,share}
 }
+
+# vim: ts=2 sw=2 et:
