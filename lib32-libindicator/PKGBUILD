@@ -3,9 +3,9 @@
 pkgbase=lib32-libindicator
 pkgname=('lib32-libindicator-gtk2' 'lib32-libindicator-gtk3')
 pkgver=12.10.1
-pkgrel=5
-pkgdesc="Libary with a set of symbols and convience functions that all indicators would like to use"
-arch=('i686' 'x86_64')
+pkgrel=6
+pkgdesc="Library with a set of symbols and convience functions that all indicators would like to use"
+arch=('x86_64')
 url="https://launchpad.net/libindicator"
 license=('GPL')
 makedepends=('gcc-multilib' 'lib32-gtk2' 'lib32-gtk3')
@@ -32,13 +32,13 @@ build() {
   make
 
   cd "${srcdir}/libindicator-gtk2"
-  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib32/libindicator-gtk2 \
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --libexecdir=/usr/lib32/libindicator \
               --libdir=/usr/lib32 --disable-{static,tests} --with-gtk=2
   make
 }
 
 package_lib32-libindicator-gtk3() {
-  pkgdesc="Libary with a set of symbols and convience functions that all indicators would like to use (GTK+ 3 library)"
+  pkgdesc="Library with a set of symbols and convience functions that all indicators would like to use (GTK+ 3 library) (32-bit)"
   depends=('lib32-gtk3' 'libindicator-gtk3')
   cd "${srcdir}/libindicator-gtk3"
 
@@ -47,7 +47,7 @@ package_lib32-libindicator-gtk3() {
 }
 
 package_lib32-libindicator-gtk2() {
-  pkgdesc="Libary with a set of symbols and convience functions that all indicators would like to use (GTK+ 2 library)"
+  pkgdesc="Library with a set of symbols and convience functions that all indicators would like to use (GTK+ 2 library) (32-bit)"
   depends=('lib32-gtk2' 'libindicator-gtk2')
   provides=('lib32-libindicator')
   conflicts=('lib32-libindicator')
