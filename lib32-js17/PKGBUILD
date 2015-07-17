@@ -4,7 +4,7 @@
 _pkgbasename=js17
 pkgname=lib32-$_pkgbasename
 pkgver=17.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="JavaScript interpreter and libraries (legacy) (32-bit)"
 arch=(x86_64)
 url="https://developer.mozilla.org/En/SpiderMonkey/17"
@@ -13,16 +13,16 @@ depends=($_pkgbasename lib32-nspr gcc-libs-multilib lib32-libffi lib32-readline)
 makedepends=(gcc-multilib python2 zip)
 options=(!staticlibs)
 conflicts=("lib32-js=17") 
-replaces=("lib32-js=17") 
+replaces=("lib32-js=17")
 source=("http://ftp.mozilla.org/pub/mozilla.org/js/mozjs${pkgver}.tar.gz"
-        'js17-version.patch')
+        'js17-perl-milestone.patch')
 sha256sums=('321e964fe9386785d3bf80870640f2fa1c683e32fe988eeb201b04471c172fba'
-            'c97f7a880b1660291a704aca5fb913d1c39dba2589281c791c075ac80332081b')
+            'c77994e0a89a33b1ad06f39b20bc605ee882a82cd373778f12eaa410c8db645f')
 
 prepare() {
   cd mozjs${pkgver}
 
-  patch -Np1 -i ../js17-version.patch
+  patch -Np1 -i ../js17-perl-milestone.patch
 }
 
 build() {
