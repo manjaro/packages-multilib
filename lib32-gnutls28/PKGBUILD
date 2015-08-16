@@ -6,7 +6,7 @@
 # Contributor: Pierre Schmitz <pierre@archlinux.de>
 # Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
 
-pkgname=lib32-libgnutls28
+pkgname=lib32-gnutls28
 pkgver=3.3.17.1
 pkgrel=1
 pkgdesc='A library which provides a secure layer over a reliable transport layer (32-bit)'
