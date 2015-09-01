@@ -9,7 +9,7 @@ url="http://mesa3d.sourceforge.net"
 license=('custom')
 install=mhwd.install
 source=($pkgname-$pkgver-$pkgrel.tar.xz::http://arch.localmsp.org/arch/multilib/os/x86_64/$pkgname-$pkgver-$pkgrel-x86_64.pkg.tar.xz)
-sha256sums=('02a0ffce1f96ca4941b398e2943a64d3460ef64d4420ecd8e861bb62b5c9271c')
+sha256sums=('733eca87e0aeaeb63a36f2dc54b67ccf8c62618e8eaa49e8fd5e7c5601ba344b')
 
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
