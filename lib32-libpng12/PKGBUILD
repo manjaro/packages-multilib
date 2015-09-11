@@ -1,57 +1,58 @@
-# Maintainer: Arthur Zamarin <arthurzam@gmail.com>
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: Arthur Zamarin <arthurzam@gmail.com>
 # Contributor: trya <tryagainprod@gmail.com>
 # Contributor: Jan de Groot <jgc@archlinux.org>
 # Contributor: dorphell <dorphell@archlinux.org>
 # Contributor: Travis Willard <travis@archlinux.org>
 # Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
 
-_pkgbasename=libpng
 pkgname=lib32-libpng12
-pkgver=1.2.52
+pkgver=1.2.53
 pkgrel=1
-pkgdesc="A collection of routines used to create PNG format graphics files (32-bit, 1.2 branch)"
+pkgdesc='A collection of routines used to create PNG format graphics files (32-bit)'
 arch=('x86_64')
-url="http://www.libpng.org/pub/png/libpng.html"
+url='http://www.libpng.org/pub/png/libpng.html'
 license=('custom')
-depends=('lib32-zlib' 'libpng12')
-makedepends=('gcc-multilib') 
-options=('!libtool')
+depends=('lib32-zlib')
+makedepends=('gcc-multilib')
 source=("http://sourceforge.net/projects/libpng/files/libpng-${pkgver}.tar.xz"
         "http://sourceforge.net/projects/apng/files/libpng/libpng12/libpng-${pkgver}-apng.patch.gz")
-md5sums=('49d5c71929bf69a172147c47b9309fbe'
-         '17c8a671ddcc99b8e17f9c8a395677f9')
+sha256sums=('b45e49f689e7451bd576569e6a344f7e0d11c02ecbb797f4da0e431526765c0a'
+            '64745f978fd9419a533942181316ddd1cafce63e899bc572f37d6614831c8ed3')
 
 prepare(){
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd libpng-${pkgver}
 
-  # Add animated PNG (apng) support
-  # see http://sourceforge.net/projects/libpng-apng/
-  patch -Np0 -i "${srcdir}/libpng-${pkgver}-apng.patch"
-}
-
-build() {
-  export CC="gcc -m32"
-  export CXX="g++ -m32"
-  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  patch -Np0 -i ../libpng-${pkgver}-apng.patch
 
   libtoolize --force --copy
   aclocal
   autoconf
   automake --add-missing
+}
 
-  ./configure --prefix=/usr --libdir=/usr/lib32
+build() {
+  cd libpng-${pkgver}
+
+  export CC='gcc -m32'
+  export CXX='g++ -m32'
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+  ./configure \
+    --prefix='/usr' \
+    --libdir='/usr/lib32'
   make
 }
 
 package() {
-  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+  cd libpng-${pkgver}
+
   make DESTDIR="${pkgdir}" install
 
-  rm -f ${pkgdir}/usr/lib32/{libpng.so,libpng.a,pkgconfig/libpng.pc}
-  rm -rf ${pkgdir}/usr/{include,share,bin}
+  rm -rf "${pkgdir}"/usr/{bin,include,lib32/{libpng.{a,so},pkgconfig},share}
 
-  mkdir -p "${pkgdir}/usr/share/licenses"
-  install -D -m644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -dm 755 "${pkgdir}"/usr/share/licenses/lib32-libpng12
+  install -m 644 LICENSE "${pkgdir}"/usr/share/licenses/lib32-libpng12/
 }
+
+# vim: ts=2 sw=2 et:
