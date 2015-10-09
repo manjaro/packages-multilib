@@ -1,0 +1,49 @@
+# $Id: PKGBUILD 119988 2014-10-01 20:50:38Z alucryd $
+# Contributor: Pierre Schmitz <pierre@archlinux.de>
+# Contributor: Mikko Seppälä <t-r-a-y@mbnet.fi>
+# Maintainer: Biru Ionut <ionut@archlinux.ro>
+
+_pkgbasename=pango
+pkgname=lib32-$_pkgbasename
+pkgver=1.38.0
+pkgrel=0.2
+pkgdesc="A library for layout and rendering of text (32-bit)"
+arch=('x86_64')
+license=('LGPL')
+makedepends=("gcc-multilib" 'lib32-fontconfig' \
+             'lib32-mesa-libgl' 'lib32-cairo' 'lib32-libxft' 'lib32-harfbuzz' $_pkgbasename)
+install=pango.install
+source=(http://ftp.gnome.org/pub/gnome/sources/${_pkgbasename}/${pkgver:0:4}/${_pkgbasename}-${pkgver}.tar.xz)
+url="http://www.pango.org/"
+sha256sums=('1d4e75974bad853ee9ac5fc5caee5e7ab235abbd945d51d01f3806e04e7c226c')
+
+prepare() {
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  sed -i 's#"pango.modules"#"pango.modules-32"#' pango/modules.c
+  sed -i 's#LIBTHAI_REQUIRED_VERSION=0.1.9#LIBTHAI_REQUIRED_VERSION=9.9.9#' configure
+}
+
+build() {
+  export CC="gcc -m32"
+  export CXX="g++ -m32"
+  export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  ./configure --prefix=/usr --libdir=/usr/lib32 --sysconfdir=/etc \
+      --with-dynamic-modules=arabic-fc,arabic-lang,basic-fc,basic-win32,basic-x,basic-atsui,hangul-fc,hebrew-fc,indic-fc,indic-lang,khmer-fc,syriac-fc,tibetan-fc \
+      --disable-introspection
+  make
+}
+
+package() {
+  depends=('lib32-cairo' 'lib32-libxft' 'lib32-harfbuzz' $_pkgbasename)
+  cd "${srcdir}/${_pkgbasename}-${pkgver}"
+
+  make DESTDIR="${pkgdir}" install
+  rm -rf "$pkgdir"/etc
+  rm -rf "$pkgdir"/usr/{bin/pango-view,share,include}
+  #mv "$pkgdir"/usr/bin/pango-querymodules "$pkgdir"/usr/bin/pango-querymodules-32
+  rm -rf "$pkgdir"/usr/bin
+}
