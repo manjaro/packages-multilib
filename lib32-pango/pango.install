@@ -1,5 +1,0 @@
-post_upgrade() {
-	if [ -f etc/pango/pango.modules-32 ]; then
-		rm etc/pango/pango.modules-32
-	fi
-}
