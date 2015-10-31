@@ -5,8 +5,9 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
-pkgver=358.09
+pkgver=352.55
 pkgrel=1
+epoch=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -15,7 +16,7 @@ options=('!strip')
 _arch='x86'
 _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 source=("http://us.download.nvidia.com/XFree86/Linux-${_arch}/${pkgver}/${_pkg}.run")
-sha256sums=('ce51529905fe32ade279959177a3162f95cb4860f8f8ed6e6fbacbea3ec348cf')
+sha256sums=('1d2f237b0885e0492f068786a5c3612f5e9751542826c4c7d51612193d9dd841')
 
 create_links() {
     # create soname links
@@ -62,12 +63,9 @@ package_lib32-nvidia-utils() {
 
     # OpenGL libraries
     install -D -m755 "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"
-    install -D -m755 "libEGL.so.1" "${pkgdir}/usr/lib32/nvidia/libEGL.so.${pkgver}"
-    install -D -m755 "libEGL_nvidia.so.0" "${pkgdir}/usr/lib32/libEGL_nvidia.so.0"
+    install -D -m755 "libEGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libEGL.so.${pkgver}"
     install -D -m755 "libGLESv1_CM.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGLESv1_CM.so.${pkgver}"
     install -D -m755 "libGLESv2.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGLESv2.so.${pkgver}"
-    install -D -m755 "libGLdispatch.so.0" "${pkgdir}/usr/lib32/libGLdispatch.so.0"
-    install -D -m755 "libOpenGL.so.0" "${pkgdir}/usr/lib32/libOpenGL.so.0"
 
     # OpenGL core library
     install -D -m755 "libnvidia-glcore.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-glcore.so.${pkgver}"

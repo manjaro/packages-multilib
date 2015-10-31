@@ -26,6 +26,10 @@ build() {
   patch -p1 <$srcdir/tcp-wrappers-${pkgver}%2B.patch
 
   make REAL_DAEMON_DIR=/usr/sbin STYLE=-DPROCESS_OPTIONS linux
+}
+
+package() {
+  cd $srcdir/${_pkgbasename}_${pkgver}
   make DESTDIR=$pkgdir install
 
   # It's a hack, but it's also quick and easy: Just clean up & delete various
