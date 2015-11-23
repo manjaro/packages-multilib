@@ -6,7 +6,7 @@
 
 pkgbase=lib32-mesa
 pkgname=('lib32-mesa-vdpau' 'lib32-mesa')
-pkgver=10.6.5
+pkgver=11.0.5
 pkgrel=0.1
 arch=('x86_64')
 makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
@@ -15,17 +15,15 @@ makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glprot
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz
-	LICENSE
-        0001-i965-Remove-early-release-of-DRI2-miptree.patch)
-sha256sums=('fb6fac3c85bcfa9d06b8dd439169f23f0c0924a88e44362e738b99b1feff762f'
-            '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2'
-            'a3f520ea13c923841c646a5b1627927744938ff691aa08e1aeaf14cce12bd1f7')
+	LICENSE)
+sha256sums=('9c255a2a6695fcc6ef4a279e1df0aeaf417dc142f39ee59dfb533d80494bb67a'
+            '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2')
 
 prepare() {
   cd ${srcdir}/?esa-*
 
-  # Should fix FS#45750, tested by heftig - Not merged upstream
-  patch -Np1 -i ../0001-i965-Remove-early-release-of-DRI2-miptree.patch
+  # Fix detection of libLLVM when built with CMake
+  sed -i 's/LLVM_SO_NAME=.*/LLVM_SO_NAME=LLVM/' configure
 }
 
 build() {
