@@ -1,0 +1,25 @@
+# Maintainer: Alexandru Ianu <alexandru.ianu@gmail.com>
+# Origin: Steam RUntime repository
+
+pkgname=lib32-libusb-steamruntime
+pkgver=1.0.19
+pkgrel=1
+pkgdesc="Steam runtime cross-platform user library to access USB devices (32-bit)"
+arch=('x86_64')
+url="http://libusb.info/"
+license=('LGPL')
+depends=('lib32-glibc' 'libusb' 'lib32-systemd')
+replaces=('lib32-libusb1' 'lib32-libusbx')
+provides=("lib32-libusbx=$pkgver" 'lib32-libusb')
+source=(http://repo.steamstatic.com/steamrt/pool/main/libu/libusb-1.0/libusb-1.0-0_1.0.19-1+srt1_i386.deb)
+options=(!libtool)
+sha256sums=('60515fc922bfea17a3e3842d7e02cc510530a097d210d21ca1259598124db656')
+
+package () {
+  cd "${srcdir}"
+  ar xv libusb-1.0-0_1.0.19-1+srt1_i386.deb
+  tar -xf data.tar.gz
+  mkdir "${pkgdir}"/usr
+  mkdir "${pkgdir}"/usr/lib32
+  cp lib/i386-linux-gnu/* "${pkgdir}"/usr/lib32/
+}

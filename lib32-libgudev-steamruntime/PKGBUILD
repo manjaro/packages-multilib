@@ -1,0 +1,24 @@
+# Maintainer: Alexandru Ianu <alexandru.ianu@gmail.com>
+# Origin: Steam RUntime repository
+
+pkgname=lib32-libgudev-steamruntime
+pkgver=175
+pkgrel=1
+pkgdesc='Steam runtime GObject bindings for libudev'
+arch=('x86_64')
+url='https://wiki.gnome.org/Projects/libgudev'
+license=('LGPL2.1')
+depends=('lib32-glib2' 'lib32-systemd' 'libgudev')
+conflicts=('lib32-systemd<221')
+provides=('lib32-libgudev')
+source=("http://repo.steamstatic.com/steamrt/pool/main/u/udev/libgudev-1.0-0_175-0ubuntu9.2+srt4_i386.deb")
+sha256sums=('8d398de5eebaf31c04aa71263295f573ed34535927a670298c40d98e5567167d')
+
+package() {
+  cd "${srcdir}"
+  ar xv libgudev-1.0-0_175-0ubuntu9.2+srt4_i386.deb
+  tar -xf data.tar.gz
+  mkdir "${pkgdir}"/usr
+  mkdir "${pkgdir}"/usr/lib32
+  cp usr/lib/i386-linux-gnu/* "${pkgdir}"/usr/lib32/
+}
