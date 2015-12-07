@@ -3,7 +3,7 @@
 
 pkgname=lib32-libusb-steamruntime
 pkgver=1.0.19
-pkgrel=1
+pkgrel=2
 pkgdesc="Steam runtime cross-platform user library to access USB devices (32-bit)"
 arch=('x86_64')
 url="http://libusb.info/"
@@ -22,5 +22,6 @@ package () {
   tar -xf data.tar.gz
   mkdir "${pkgdir}"/usr
   mkdir "${pkgdir}"/usr/lib32
-  cp lib/i386-linux-gnu/* "${pkgdir}"/usr/lib32/
+  cp lib/i386-linux-gnu/libusb-1.0.so.0.1.0 "${pkgdir}"/usr/lib32/libusb-1.0.so.0.1.0
+  ln -s "${pkgdir}"/usr/lib32/libusb-1.0.so.0.1.0 "${pkgdir}"/usr/lib32/libusb-1.0.so.0
 }

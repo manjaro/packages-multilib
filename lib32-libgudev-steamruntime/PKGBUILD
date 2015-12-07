@@ -3,7 +3,7 @@
 
 pkgname=lib32-libgudev-steamruntime
 pkgver=175
-pkgrel=1
+pkgrel=2
 pkgdesc='Steam runtime GObject bindings for libudev'
 arch=('x86_64')
 url='https://wiki.gnome.org/Projects/libgudev'
@@ -20,5 +20,6 @@ package() {
   tar -xf data.tar.gz
   mkdir "${pkgdir}"/usr
   mkdir "${pkgdir}"/usr/lib32
-  cp usr/lib/i386-linux-gnu/* "${pkgdir}"/usr/lib32/
+  cp usr/lib/i386-linux-gnu/libgudev-1.0.so.0.1.1 "${pkgdir}"/usr/lib32/libgudev-1.0.so.0.1.1
+  ln -s "${pkgdir}"/usr/lib32/libgudev-1.0.so.0.1.1 "${pkgdir}"/usr/lib32/libgudev-1.0.so.0
 }
