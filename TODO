@@ -8,8 +8,6 @@ lib32-libgudev
 lib32-pam
 lib32-libxkbcommon
 lib32-flex
-lib32-libproxy
-lib32-js17
 lib32-rest
 lib32-libgusb
 lib32-json-glib
