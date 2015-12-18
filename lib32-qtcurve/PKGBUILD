@@ -5,7 +5,7 @@ _pkgbase=qtcurve
 pkgbase=lib32-qtcurve
 pkgname=('lib32-qtcurve-utils' 'lib32-qtcurve-gtk2' 'lib32-qtcurve-qt4')
 pkgver=1.8.18.r244.g330bfa5
-pkgrel=1
+pkgrel=2
 pkgdesc='The QtCurve style engine ready for Plasma 5 (32-bit version)'
 arch=('i686' 'x86_64')
 url="https://github.com/QtCurve/${_pkgbase}"
@@ -48,15 +48,13 @@ build() {
 }
 
 package_lib32-qtcurve-utils() {
-    depends=('lib32-libx11')
-    conflicts=('lib32-qtcurve-utils=1.8.18-1' 'lib32-qtcurve-utils-git')
+    depends=('lib32-libx11' 'lib32-gcc-libs')
     cd qtcurve/b/lib/utils
     make DESTDIR="$pkgdir" install
 }
 
 package_lib32-qtcurve-gtk2() {
-    depends=('lib32-qtcurve-utils=1.8.18.r244.g330bfa5-1' 'lib32-gtk2' 'qtcurve-gtk2=1.8.18.r244.g330bfa5-1')
-    conflicts=('lib32-qtcurve-gtk2=1.8.18-1' 'lib32-qtcurve-gtk2-git')
+    depends=('lib32-qtcurve-utils' 'lib32-gtk2' 'qtcurve-gtk2')
     cd ${_pkgbase}/b/gtk2
     make DESTDIR="$pkgdir" install
     cd ../lib/cairo
@@ -67,8 +65,7 @@ package_lib32-qtcurve-gtk2() {
 }
 
 package_lib32-qtcurve-qt4() {
-    depends=('lib32-qtcurve-utils=1.8.18.r244.g330bfa5-1' 'lib32-qt4')
-    conflicts=('lib32-qtcurve-qt4=1.8.18-1' 'lib32-qtcurve-qt4-git')
+    depends=('lib32-qtcurve-utils' 'lib32-qt4')
     cd qtcurve/b/qt4
     make DESTDIR="$pkgdir" install
 }
