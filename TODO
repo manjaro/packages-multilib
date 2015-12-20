@@ -7,7 +7,5 @@ lib32-libxkbcommon-x11
 lib32-libgudev
 lib32-pam
 lib32-libxkbcommon
-lib32-flex
 lib32-rest
-lib32-libgusb
 lib32-json-glib
