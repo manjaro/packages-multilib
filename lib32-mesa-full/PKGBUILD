@@ -6,7 +6,7 @@
 
 pkgbase=lib32-mesa
 pkgname=('lib32-mesa-vdpau' 'lib32-mesa')
-pkgver=11.0.5
+pkgver=11.0.8
 pkgrel=0.1
 arch=('x86_64')
 makedepends=('python2-mako' 'lib32-libxml2' 'lib32-expat' 'lib32-libx11' 'glproto' 'lib32-libdrm' 'dri2proto' 'dri3proto' 'presentproto'
@@ -16,7 +16,7 @@ url="http://mesa3d.sourceforge.net"
 license=('custom')
 source=(ftp://ftp.freedesktop.org/pub/mesa/${pkgver}/mesa-${pkgver}.tar.xz
 	LICENSE)
-sha256sums=('9c255a2a6695fcc6ef4a279e1df0aeaf417dc142f39ee59dfb533d80494bb67a'
+sha256sums=('5696e4730518b6805d2ed5def393c4293f425a2c2c01bd5ed4bdd7ad62f7ad75'
             '7fdc119cf53c8ca65396ea73f6d10af641ba41ea1dd2bd44a824726e01c8b3f2')
 
 prepare() {
