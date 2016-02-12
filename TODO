@@ -8,3 +8,4 @@ lib32-libgudev
 lib32-libxkbcommon
 lib32-rest
 lib32-json-glib
+lib32-libvpx
