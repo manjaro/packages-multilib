@@ -9,3 +9,6 @@ pkg
 *.xz
 *.log
 *~
+.AURINFO
+.SRCINFO
+
