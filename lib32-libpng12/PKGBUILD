@@ -7,8 +7,8 @@
 # Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
 
 pkgname=lib32-libpng12
-pkgver=1.2.53
-pkgrel=2
+pkgver=1.2.56
+pkgrel=1
 pkgdesc='A collection of routines used to create PNG format graphics files (32-bit)'
 arch=('x86_64')
 url='http://www.libpng.org/pub/png/libpng.html'
@@ -17,8 +17,8 @@ depends=('lib32-zlib')
 makedepends=('gcc-multilib')
 source=("http://sourceforge.net/projects/libpng/files/libpng-${pkgver}.tar.xz"
         "http://sourceforge.net/projects/apng/files/libpng/libpng12/libpng-${pkgver}-apng.patch.gz")
-sha256sums=('b45e49f689e7451bd576569e6a344f7e0d11c02ecbb797f4da0e431526765c0a'
-            '64745f978fd9419a533942181316ddd1cafce63e899bc572f37d6614831c8ed3')
+sha256sums=('24ce54581468b937734a6ecc86f7e121bc46a90d76a0d948dca08f32ee000dbe'
+            '454631947201483930c759ecb3741618258e8143db4ff13b0d938b4238bc8708')
 
 prepare(){
   cd libpng-${pkgver}
