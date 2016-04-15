@@ -2,7 +2,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>
 
 pkgname=lib32-libteam
-pkgver=1.14
+pkgver=1.23
 pkgrel=1
 pkgdesc='Library for controlling team network device (32-bit)'
 arch=('x86_64')
@@ -12,7 +12,7 @@ depends=('lib32-jansson' 'lib32-libdaemon' 'lib32-libdbus' 'lib32-libnl'
          'libteam')
 makedepends=('gcc-multilib' 'swig')
 source=("http://libteam.org/files/libteam-${pkgver}.tar.gz")
-sha256sums=('294cdabd85cddfeac304ecbd4f331ef3f9afbf03f8b8ef7bb3a9c5827ab22d97')
+sha256sums=('d8cd132c425032cc3a7e9314c55485e32243875e0b1adbddd043bbadf1d28c5a')
 
 build() {
   cd libteam-${pkgver}
@@ -24,11 +24,17 @@ build() {
   ./configure \
     --prefix='/usr' \
     --libdir='/usr/lib32' \
-    --libexecdir='/usr/lib32' \
+    --libexecdir='/usr/lib' \
     --localstatedir='/var' \
     --sysconfdir='/etc' \
-    --disable-static
+    --disable-static \
+    --disable-zmq
     make
+}
+
+check() {
+  cd libteam-${pkgver}
+  make check
 }
 
 package() {
