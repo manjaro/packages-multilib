@@ -1,6 +1,5 @@
  
 Packages that can be removed when the arch version is greater than ours:
 
-lib32-cracklib (in arch testing)
 lib32-popt
 lib32-qtcurve
