@@ -6,7 +6,11 @@ lib32-gconf
 lib32-glew1.10
 lib32-libdaemon
 lib32-libnewt
+lib32-libpng12
 lib32-libteam
+lib32-libwebp
 lib32-popt
 lib32-qtcurve
+lib32-sdl2_image
 lib32-slang
+lib32-smpeg
