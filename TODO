@@ -1,5 +1,12 @@
  
 Packages that can be removed when the arch version is greater than ours:
 
+lib32-dbus-glib
+lib32-gconf
+lib32-glew1.10
+lib32-libdaemon
+lib32-libnewt
+lib32-libteam
 lib32-popt
 lib32-qtcurve
+lib32-slang
