@@ -8,7 +8,7 @@
 
 pkgname=lib32-libnm-glib46
 pkgver=0.9.8.10
-pkgrel=2
+pkgrel=3
 pkgdesc='NetworkManager library (32-bit)'
 arch=('x86_64')
 url='http://www.gnome.org/projects/NetworkManager/'
@@ -19,7 +19,6 @@ makedepends=('dhcpcd' 'dhclient' 'dhcp-client' 'gtk-doc' 'intltool' 'iproute2'
              'iptables' 'lib32-libmm-glib' 'lib32-libndp' 'lib32-libnewt'
              'lib32-libnl' 'lib32-polkit' 'lib32-libsoup' 'lib32-libteam'
              'modemmanager' 'ppp' 'python2' 'vala' 'wpa_supplicant')
-replaces=('lib32-libnm-glib')
 source=("http://ftp.gnome.org/pub/gnome/sources/NetworkManager/${pkgver%.*.*}/NetworkManager-${pkgver}.tar.xz"
         'disable_set_hostname.patch')
 sha256sums=('064d27223d3824859df12e1fb25b787fec1c68bbc864dc52a0289b9211c4c972'
