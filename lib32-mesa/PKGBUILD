@@ -3,18 +3,18 @@
 
 pkgname=('lib32-mesa')
 pkgver=12.0.3
-pkgrel=3
+pkgrel=4
 arch=('x86_64')
 url="http://mesa3d.sourceforge.net"
 license=('custom')
 install=mhwd.install
 source=($pkgname-$pkgver-$pkgrel.tar.xz::http://mirror.f4st.host/archlinux/pool/community/$pkgname-$pkgver-$pkgrel-x86_64.pkg.tar.xz)
-sha256sums=('c9180e822cc62b6fd7f938a9e800fa31c0f51f15d510c87ab65d04ef9a0a4916')
+sha256sums=('351771712c422ecb40ae5cb1cfaff2709aaa9209510a01ae7be66ef78d537262')
 
 package_lib32-mesa() {
   pkgdesc="an open-source implementation of the OpenGL specification (32-bit)"
   depends=('lib32-libdrm' 'lib32-libxxf86vm' 'lib32-libxdamage' 'lib32-libxshmfence' 'lib32-systemd'
-           'lib32-elfutils' 'lib32-llvm-libs' 'lib32-wayland' 'lib32-libtxc_dxtn' 'lib32-expat' 'mesa'
+           'lib32-libelf' 'lib32-llvm-libs' 'lib32-wayland' 'lib32-libtxc_dxtn' 'lib32-expat' 'mesa'
            'mhwd')
   optdepends=('opengl-man-pages: for the OpenGL API man pages'
               'lib32-mesa-vdpau: for accelerated video playback')
