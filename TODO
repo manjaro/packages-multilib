@@ -4,7 +4,6 @@ Packages that can be removed when the arch version is greater than ours:
 lib32-glew1.10
 lib32-libindicator (-gtk2,-gtk3)
 lib32-libnewt
-lib32-libteam
 lib32-popt
 lib32-qtcurve
 lib32-sdl2_image
