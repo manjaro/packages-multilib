@@ -5,8 +5,8 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
-pkgver=375.20
-pkgrel=1
+pkgver=370.28
+pkgrel=3
 epoch=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -18,7 +18,7 @@ _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 durl="http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}"
 #durl="http://developer.download.nvidia.com/assets/opengl/369.00"
 source=("${durl}/NVIDIA-Linux-x86-${pkgver}.run")
-sha256sums=('cc79d3ac2b688009ed2e47a1cf27557aea5dd745b3b6e9b83945c359ddab4335')
+sha256sums=('6323254ccf2a75d7ced1374a76ca56778689d0d8a9819e4ee5378ea3347b9835')
 
 create_links() {
     # create soname links
@@ -36,8 +36,9 @@ build() {
 
 package_lib32-opencl-nvidia() {
     pkgdesc="OpenCL implemention for NVIDIA (32-bit)"
-    depends=('lib32-libcl' 'lib32-zlib' 'lib32-gcc-libs')
+    depends=('lib32-zlib' 'lib32-gcc-libs')
     optdepends=('opencl-headers: headers necessary for OpenCL development')
+    provides=('lib32-opencl-driver')
     cd "${_pkg}"
 
     # OpenCL

@@ -5,7 +5,7 @@ _pkgbasename=nvidia-304xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-304xx-utils' 'lib32-opencl-nvidia-304xx')
 pkgver=304.131
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -34,9 +34,10 @@ build() {
 
 package_lib32-opencl-nvidia-304xx() {
     pkgdesc="OpenCL implemention for NVIDIA (32-bit)"
-    depends=('lib32-libcl' 'lib32-zlib' 'lib32-gcc-libs' 'opencl-nvidia-304xx')
+    depends=('lib32-zlib' 'lib32-gcc-libs' 'opencl-nvidia-304xx')
     optdepends=('opencl-headers: headers necessary for OpenCL development')
     conflicts=('lib32-opencl-nvidia')
+    provides=('lib32-opencl-driver')
 
     cd "${_pkg}"
 
