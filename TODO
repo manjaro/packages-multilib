@@ -9,3 +9,12 @@ lib32-qtcurve
 lib32-sdl2_image
 lib32-slang
 lib32-smpeg
+
+
+Packages for lib32-sni-qt
+
+lbi32-libdbusmenu-qt
+lib32-libmng
+lib32-qjson
+lib32-qt4
+lib32-sni-qt
