@@ -6,7 +6,7 @@ _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
 pkgver=15.201.1151
-pkgrel=1
+pkgrel=2
 epoch=1
 _pkgver=15.201.1151
 _tarball=15.9-linux-installer-15.201.1151
@@ -54,6 +54,17 @@ package_lib32-catalyst-utils() {
 
       # Fallback links
       ln -s "/usr/lib32/fglrx/libGL.so.1.2" "${pkgdir}/usr/lib32/libGL.so.catalyst"
+
+      # We have to provide symlinks to mesa, as catalyst doesn't ship them
+      ln -s /usr/lib32/libEGL.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libEGL.so.1.0.0"
+      ln -s libEGL.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libEGL.so.1"
+      ln -s libEGL.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libEGL.so"
+      ln -s /usr/lib32/libGLESv1_CM.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv1_CM.so.1.0.0"
+      ln -s libGLESv1_CM.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv1_CM.so.1"
+      ln -s libGLESv1_CM.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv1_CM.so"
+      ln -s /usr/lib32/libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv2.so.2.0.0"
+      ln -s libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv2.so.2"
+      ln -s libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv2.so"
 
       install -m755 X11R6/lib/libAMDXvBA.so.1.0 ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/libatiadlxx.so ${pkgdir}/usr/lib32

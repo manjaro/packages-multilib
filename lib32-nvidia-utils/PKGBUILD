@@ -6,7 +6,7 @@ _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
 pkgver=375.39
-pkgrel=1
+pkgrel=2
 epoch=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -111,14 +111,6 @@ package_lib32-nvidia-utils() {
 
     create_links
 
-    # Cleanup
-    rm -rf "${pkgdir}"/usr/{include,share,bin}
-    if [ -f "${pkgdir}/usr/lib32/libGL.so" ]; then
-        rm "${pkgdir}/usr/lib32/libGL.so"
-    fi
-    if [ -f "${pkgdir}/usr/lib32/libGL.so.1" ]; then
-        rm "${pkgdir}/usr/lib32/libGL.so.1"
-    fi
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
 }

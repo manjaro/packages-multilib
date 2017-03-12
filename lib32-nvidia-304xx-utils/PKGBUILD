@@ -5,7 +5,7 @@ _pkgbasename=nvidia-304xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-304xx-utils' 'lib32-opencl-nvidia-304xx')
 pkgver=304.134
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -67,13 +67,11 @@ package_lib32-nvidia-304xx-utils() {
     # OpenGL library
     install -D -m755 "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"
     ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.1.2"
-    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.1"
-    ln -s "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so"
 
     # We have to provide symlinks to mesa, as nvidia 304xx doesn't ship them
-    ln -s /usr/lib32/mesa/libEGL.so.1.0.0 "${pkgdir}/usr/lib32/nvidia/libEGL.so.${pkgver}"
-    ln -s /usr/lib32/mesa/libGLESv1_CM.so.1.1.0 "${pkgdir}/usr/lib32/nvidia/libGLESv1_CM.so.${pkgver}"
-    ln -s /usr/lib32/mesa/libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/nvidia/libGLESv2.so.${pkgver}"
+    ln -s /usr/lib32/libEGL.so.1.0.0 "${pkgdir}/usr/lib32/nvidia/libEGL.so.1.0.0"
+    ln -s /usr/lib32/libGLESv1_CM.so.1.0.0 "${pkgdir}/usr/lib32/nvidia/libGLESv1_CM.so.1.0.0"
+    ln -s /usr/lib32/libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/nvidia/libGLESv2.so.2.0.0"
 
     # OpenGL core library
     install -D -m755 libnvidia-glcore.so.${pkgver} "${pkgdir}/usr/lib32/libnvidia-glcore.so.${pkgver}"
