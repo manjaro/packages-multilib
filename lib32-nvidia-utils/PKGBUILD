@@ -6,7 +6,7 @@ _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
 pkgver=375.39
-pkgrel=5
+pkgrel=6
 epoch=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -54,7 +54,7 @@ package_lib32-opencl-nvidia() {
 
 package_lib32-nvidia-utils() {
     pkgdesc="NVIDIA drivers utilities (32-bit)"
-    depends=('lib32-zlib' 'lib32-gcc-libs' 'lib32-mesa' 'mhwd' 'nvidia-utils')
+    depends=('lib32-zlib' 'lib32-gcc-libs' 'lib32-libglvnd' 'mhwd' 'nvidia-utils')
     optdepends=('lib32-opencl-nvidia')
     provides=('lib32-nvidia-libgl')
     conflicts=('lib32-nvidia-libgl')
@@ -66,10 +66,8 @@ package_lib32-nvidia-utils() {
     # GLX extension module for X
     install -D -m755 "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so.${pkgver}"
     ln -s "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so"	# X doesn't find glx otherwise
-    #install -D -m755 "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_nvidia.so.${pkgver}"
-    #ln -s "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
-    # We have to provide symlink to mesa (see https://bugzilla.redhat.com/show_bug.cgi?id=1413579#c57)
-    ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+    install -D -m755 "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_nvidia.so.${pkgver}"
+    ln -s "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
     # Wayland
     install -D -m755 "libnvidia-egl-wayland.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.${pkgver}"
@@ -113,8 +111,6 @@ package_lib32-nvidia-utils() {
     install -D -m755 "libnvidia-fatbinaryloader.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-fatbinaryloader.so.${pkgver}"
 
     create_links
-
-    rm "${pkgdir}"/usr/lib32/libGLX_mesa.so*
 
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
