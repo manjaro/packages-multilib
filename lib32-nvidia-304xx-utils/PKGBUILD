@@ -5,7 +5,7 @@ _pkgbasename=nvidia-304xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-304xx-utils' 'lib32-opencl-nvidia-304xx')
 pkgver=304.134
-pkgrel=3
+pkgrel=4
 epoch=1
 pkgdesc="NVIDIA drivers utilities and libraries. (32-bit)"
 arch=('x86_64')
@@ -109,6 +109,8 @@ package_lib32-nvidia-304xx-utils() {
     if [ -f "${pkgdir}/usr/lib32/libGL.so.1" ]; then
         rm "${pkgdir}/usr/lib32/libGL.so.1"
     fi
+
+    rm "${pkgdir}"/usr/lib32/libGLX_mesa.so*
 
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"

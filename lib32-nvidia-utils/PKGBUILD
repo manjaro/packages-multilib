@@ -6,7 +6,7 @@ _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
 pkgver=375.39
-pkgrel=4
+pkgrel=5
 epoch=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -113,6 +113,8 @@ package_lib32-nvidia-utils() {
     install -D -m755 "libnvidia-fatbinaryloader.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-fatbinaryloader.so.${pkgver}"
 
     create_links
+
+    rm "${pkgdir}"/usr/lib32/libGLX_mesa.so*
 
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"

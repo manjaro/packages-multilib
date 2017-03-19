@@ -6,7 +6,7 @@ _pkgbasename=nvidia-340xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-340xx-utils' 'lib32-opencl-nvidia-340xx')
 pkgver=340.101
-pkgrel=3
+pkgrel=4
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -107,6 +107,9 @@ package_lib32-nvidia-340xx-utils() {
     if [ -f "${pkgdir}/usr/lib32/libGL.so.1" ]; then
         rm "${pkgdir}/usr/lib32/libGL.so.1"
     fi
+
+    rm "${pkgdir}"/usr/lib32/libGLX_mesa.so*
+
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
 }
