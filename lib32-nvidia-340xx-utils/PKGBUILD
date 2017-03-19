@@ -6,7 +6,7 @@ _pkgbasename=nvidia-340xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-340xx-utils' 'lib32-opencl-nvidia-340xx')
 pkgver=340.101
-pkgrel=4
+pkgrel=5
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -67,7 +67,8 @@ package_lib32-nvidia-340xx-utils() {
     install -D -m755 "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so.${pkgver}"
     ln -s "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so"	# X doesn't find glx otherwise
     # We have to provide symlinks to mesa, as nvidia 340xx doesn't ship them
-    ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+    #ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+    ln -s "nvidia/xorg/modules/extensions/libglx.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
     # OpenGL libraries
     install -D -m755 "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"
@@ -108,7 +109,10 @@ package_lib32-nvidia-340xx-utils() {
         rm "${pkgdir}/usr/lib32/libGL.so.1"
     fi
 
-    rm "${pkgdir}"/usr/lib32/libGLX_mesa.so*
+    #rm "${pkgdir}"/usr/lib32/libGLX_mesa.so*
+
+    install -dm 755 "${pkgdir}"/etc/ld.so.conf.d
+    echo -e '/usr/lib32/nvidia/' > "${pkgdir}"/etc/ld.so.conf.d/00-lib32-nvidia.conf
 
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"

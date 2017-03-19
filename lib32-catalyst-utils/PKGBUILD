@@ -6,7 +6,7 @@ _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
 pkgver=15.201.1151
-pkgrel=3
+pkgrel=4
 epoch=1
 _pkgver=15.201.1151
 _tarball=15.9-linux-installer-15.201.1151
@@ -52,15 +52,13 @@ package_lib32-catalyst-utils() {
       ln -sf libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1
       ln -sf libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so
 
-      # Fallback links
-      ln -s "/usr/lib32/fglrx/libGL.so.1.2" "${pkgdir}/usr/lib32/libGL.so.catalyst"
-
       # GLX extension module for X
       install -D -m755 ../../../xpic/usr/X11R6/lib/modules/extensions/fglrx/fglrx-libglx.so "${pkgdir}/usr/lib32/fglrx/xorg/libglx.so.1"
       ln -s "libglx.so.1"  "${pkgdir}/usr/lib32/fglrx/xorg/libglx.so"
 
       # We have to provide symlink to mesa (see https://bugzilla.redhat.com/show_bug.cgi?id=1413579#c57)
-      ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+      #ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+      ln -s "fglrx/xorg/libglx.so.1" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
       # We have to provide symlinks to mesa, as catalyst doesn't ship them
       ln -s /usr/lib32/libEGL.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libEGL.so.1.0.0"
@@ -90,6 +88,9 @@ package_lib32-catalyst-utils() {
       # License
       install -m755 -d ${pkgdir}/usr/share/licenses/${pkgname}
       install -m644 ${srcdir}/fglrx-$_pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+
+      install -dm 755 "${pkgdir}"/etc/ld.so.conf.d
+      echo -e '/usr/lib32/fglrx/' > "${pkgdir}"/etc/ld.so.conf.d/00-lib32-fglrx.conf
 
       # provided in lib32-opencl-catalyst package
       rm "${pkgdir}"/usr/lib32/lib{amdocl*,OpenCL}.so* 
