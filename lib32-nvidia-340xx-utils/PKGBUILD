@@ -6,7 +6,7 @@ _pkgbasename=nvidia-340xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-340xx-utils' 'lib32-opencl-nvidia-340xx')
 pkgver=340.101
-pkgrel=5
+pkgrel=6
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -68,7 +68,7 @@ package_lib32-nvidia-340xx-utils() {
     ln -s "libglx.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/xorg/modules/extensions/libglx.so"	# X doesn't find glx otherwise
     # We have to provide symlinks to mesa, as nvidia 340xx doesn't ship them
     #ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
-    ln -s "nvidia/xorg/modules/extensions/libglx.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+    #ln -s "nvidia/xorg/modules/extensions/libglx.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
     # OpenGL libraries
     install -D -m755 "libGL.so.${pkgver}" "${pkgdir}/usr/lib32/nvidia/libGL.so.${pkgver}"

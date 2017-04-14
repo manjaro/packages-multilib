@@ -6,7 +6,7 @@ _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
 pkgver=15.201.1151
-pkgrel=4
+pkgrel=5
 epoch=1
 _pkgver=15.201.1151
 _tarball=15.9-linux-installer-15.201.1151
@@ -58,7 +58,7 @@ package_lib32-catalyst-utils() {
 
       # We have to provide symlink to mesa (see https://bugzilla.redhat.com/show_bug.cgi?id=1413579#c57)
       #ln -s "/usr/lib32/libGLX_mesa.so.0.0.0" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
-      ln -s "fglrx/xorg/libglx.so.1" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
+      #ln -s "fglrx/xorg/libglx.so.1" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
       # We have to provide symlinks to mesa, as catalyst doesn't ship them
       ln -s /usr/lib32/libEGL.so.1.0.0 "${pkgdir}/usr/lib32/fglrx/libEGL.so.1.0.0"
