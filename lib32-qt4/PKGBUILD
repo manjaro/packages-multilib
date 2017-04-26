@@ -11,7 +11,7 @@ pkgdesc='A cross-platform application and UI framework (32-bit)'
 arch=('x86_64')
 url='http://qt-project.org/'
 license=('GPL3' 'LGPL')
-depends=(lib32-{fontconfig,sqlite,alsa-lib,glib2,dbus,openssl}
+depends=(lib32-{fontconfig,sqlite,alsa-lib,glib2,dbus,openssl-1.0}
          lib32-lib{png,tiff,mng,gl,sm,xrandr,xv,xi} $_pkgbasename)
 optdepends=('lib32-libxinerama: Xinerama support'
             'lib32-libxcursor: Xcursor support'
@@ -40,6 +40,8 @@ prepare() {
   export QT4DIR=$srcdir/$_pkgfqn
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+  export OPENSSL_LIBS='-L/usr/lib32/openssl-1.0 -lssl -lcrypto'
+  export CXXFLAGS+=" -I/usr/include/openssl-1.0"
 
   # http://blog.martin-graesslin.com/blog/2014/06/where-are-my-systray-icons/
   patch -p1 -i "${srcdir}"/kubuntu_14_systemtrayicon.diff
@@ -70,7 +72,7 @@ build() {
   export LD_LIBRARY_PATH=${QT4DIR}/lib:${LD_LIBRARY_PATH}
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  ./configure -confirm-license -opensource -v -platform linux-g++-32 \
+  ./configure -confirm-license -opensource -v \
     -prefix /usr \
     -libdir /usr/lib32 \
     -plugindir /usr/lib32/qt/plugins \
