@@ -5,7 +5,6 @@ lib32-glew1.10
 lib32-libindicator (-gtk2,-gtk3)
 lib32-popt
 lib32-qtcurve
-lib32-sdl2_image
 lib32-slang
 lib32-smpeg
 
