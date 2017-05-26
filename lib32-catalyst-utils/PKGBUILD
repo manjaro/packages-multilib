@@ -6,7 +6,7 @@ _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
 pkgver=15.201.1151
-pkgrel=6
+pkgrel=7
 epoch=1
 _pkgver=15.201.1151
 _tarball=15.9-linux-installer-15.201.1151
@@ -49,6 +49,7 @@ package_lib32-catalyst-utils() {
       cd ${srcdir}/fglrx-$_pkgver/archive_files/arch/x86/usr
       install -dm755 ${pkgdir}/usr/lib32
       install -dm755 ${pkgdir}/usr/lib32/fglrx
+      install -dm755 ${pkgdir}/usr/lib32/dri
       install -dm755 ${pkgdir}/usr/lib32/xorg/modules/dri
       install -m755 lib/*.so* ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1.2
@@ -79,7 +80,7 @@ package_lib32-catalyst-utils() {
       install -m755 X11R6/lib/libfglrx_dm.so.1.0 ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/libXvBAW.so.1.0 ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/modules/dri/*.so ${pkgdir}/usr/lib32/xorg/modules/dri
-      ln -snf /usr/lib32/xorg/modules/dri ${pkgdir}/usr/lib32/dri
+      ln -snf /usr/lib32/xorg/modules/dri/fglrx_dri.so ${pkgdir}/usr/lib32/dri/fglrx_dri.so
 
       cd $pkgdir/usr/lib32
       ln -sf libfglrx_dm.so.1.0 libfglrx_dm.so.1
