@@ -6,7 +6,7 @@ _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
 pkgver=15.201.1151
-pkgrel=5
+pkgrel=7
 epoch=1
 _pkgver=15.201.1151
 _tarball=15.9-linux-installer-15.201.1151
@@ -25,6 +25,9 @@ source=(http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}-x86.x86_64.zi
 sha256sums=('bf3e6e7d5c51db3d075410a3f116f865b82823debc1d66698d187249feec6a91'
             '1f4f611ed80e2626ef39486020a06c328c15dad76e1365a4bd553342060ff409'
             '4f7530540f6e1ea032746e94bd164160abdf93c15509bfb8bdbecd23bcea5c47')
+	    
+url_ref="http://support.amd.com/en-us/download/desktop?os=Linux+x86"
+DLAGENTS="http::/usr/bin/curl --referer ${url_ref} -o %o %u"
 
 prepare() {
 	#cd ${srcdir}/fglrx-$_pkgver
@@ -46,6 +49,7 @@ package_lib32-catalyst-utils() {
       cd ${srcdir}/fglrx-$_pkgver/archive_files/arch/x86/usr
       install -dm755 ${pkgdir}/usr/lib32
       install -dm755 ${pkgdir}/usr/lib32/fglrx
+      install -dm755 ${pkgdir}/usr/lib32/dri
       install -dm755 ${pkgdir}/usr/lib32/xorg/modules/dri
       install -m755 lib/*.so* ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1.2
@@ -76,7 +80,7 @@ package_lib32-catalyst-utils() {
       install -m755 X11R6/lib/libfglrx_dm.so.1.0 ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/libXvBAW.so.1.0 ${pkgdir}/usr/lib32
       install -m755 X11R6/lib/modules/dri/*.so ${pkgdir}/usr/lib32/xorg/modules/dri
-      ln -snf /usr/lib32/xorg/modules/dri ${pkgdir}/usr/lib32/dri
+      ln -snf /usr/lib32/xorg/modules/dri/fglrx_dri.so ${pkgdir}/usr/lib32/dri/fglrx_dri.so
 
       cd $pkgdir/usr/lib32
       ln -sf libfglrx_dm.so.1.0 libfglrx_dm.so.1
