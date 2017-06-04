@@ -4,68 +4,62 @@
 _pkgbase=qtcurve
 pkgbase=lib32-qtcurve
 pkgname=('lib32-qtcurve-utils' 'lib32-qtcurve-gtk2' 'lib32-qtcurve-qt4')
-pkgver=1.8.18.r244.g330bfa5
-pkgrel=2
-pkgdesc='The QtCurve style engine ready for Plasma 5 (32-bit version)'
+pkgver=1.9.1
+pkgrel=1
+pkgdesc='The QtCurve style engine ready for Qt4 and Gtk (32-bit)'
 arch=('i686' 'x86_64')
-url="https://github.com/QtCurve/${_pkgbase}"
+url='https://github.com/KDE/qtcurve/'
 license=('LGPL')
 groups=('qtcurve')
-makedepends=('cmake' 'gcc-multilib' 'git' 'automoc4' 'lib32-gtk2' 'lib32-qt4')
-source=("qtcurve::git://anongit.kde.org/qtcurve.git" 'qconfig.h')
-md5sums=('SKIP'
-         '6b89fb32651dd73d1c02185d23b86186')
-
-pkgver() {
-    cd ${_pkgbase}
-    git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
-}
+makedepends=('extra-cmake-modules' 'lib32-gtk2' 'lib32-qt4' 'python')
+source=("$_pkgbase-$pkgver.tar.gz::https://github.com/KDE/qtcurve/archive/$pkgver.tar.gz")
+sha256sums=('fbfdafdac90d4c540dd55a4accfecfc3a17c1f532c5241e28003348beafaca15')
 
 prepare() {
-    cd ${_pkgbase}
-    [ -d b ] || mkdir b
+  mkdir -p build
 
-    # export multilib parameters
-    # and QT_BUILD_KEY workaround
-    export CC="gcc -m32 -I$srcdir"
-    export CXX="g++ -m32 -I$srcdir"
-    export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
-
-    [ -d QtCore ] || mkdir QtCore
-    ln -s ../${source[1]} QtCore
+  # export multilib parameters
+  # and QT_BUILD_KEY workaround
+  export CC="gcc -m32 -I$srcdir"
+  export CXX="g++ -m32 -I$srcdir"
+  export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 }
 
 build() {
-    cd ${_pkgbase}/b
-    cmake .. -DCMAKE_BUILD_TYPE=Release \
-             -DCMAKE_INSTALL_PREFIX=/usr \
-             -DQT_PLUGINS_DIR=/usr/lib32/qt/plugins \
-             -DQT_LIBRARY_DIR=/usr/lib32 \
-             -DLIB_INSTALL_DIR=/usr/lib32 \
-             -DQTC_QT4_ENABLE_KDE=false \
-             -DENABLE_QT5=false
-    make
+  cd build
+  cmake ../$_pkgbase-$pkgver \
+           -DCMAKE_BUILD_TYPE=Release \
+           -DCMAKE_INSTALL_PREFIX=/usr \
+           -DQT_PLUGINS_DIR=/usr/lib32/qt/plugins \
+           -DQT_LIBRARY_DIR=/usr/lib32 \
+           -DLIB_INSTALL_DIR=/usr/lib32 \
+           -DQTC_QT4_ENABLE_KDE=false \
+           -DQTC_QT5_ENABLE_KDE=false
+  make
 }
 
 package_lib32-qtcurve-utils() {
-    depends=('lib32-libx11' 'lib32-gcc-libs')
-    cd qtcurve/b/lib/utils
-    make DESTDIR="$pkgdir" install
+  pkgdesc='A configurable set of widget styles for KDE and Gtk (shared libraries) (32-bit)'
+  depends=('lib32-libx11' 'lib32-gcc-libs')
+  cd build/lib/utils
+  make DESTDIR="$pkgdir" install
 }
 
 package_lib32-qtcurve-gtk2() {
-    depends=('lib32-qtcurve-utils' 'lib32-gtk2' 'qtcurve-gtk2')
-    cd ${_pkgbase}/b/gtk2
-    make DESTDIR="$pkgdir" install
-    cd ../lib/cairo
-    make DESTDIR="$pkgdir" install
+  pkgdesk='A configurable set of widget styles for Gtk2 (32-bit)'
+  depends=('lib32-qtcurve-utils' 'lib32-gtk2' 'qtcurve-gtk2')
+  cd build/gtk2
+  make DESTDIR="$pkgdir" install
+  cd ../lib/cairo
+  make DESTDIR="$pkgdir" install
 
-    # strip themes
-    rm -rf "$pkgdir/usr/share"
+  # strip themes
+  rm -rf "$pkgdir/usr/share"
 }
 
 package_lib32-qtcurve-qt4() {
-    depends=('lib32-qtcurve-utils' 'lib32-qt4')
-    cd qtcurve/b/qt4
-    make DESTDIR="$pkgdir" install
+  pkgdesc='A configurable set of widget styles for Qt4 (32-bit)'
+  depends=('lib32-qtcurve-utils' 'lib32-qt4')
+  cd build/qt4
+  make DESTDIR="$pkgdir" install
 }
