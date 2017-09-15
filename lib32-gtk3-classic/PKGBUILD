@@ -5,7 +5,7 @@ __arch_pkg_commit="712b5a879d9389efba706c8817607fa65ac562e9"
 
 pkgname=lib32-gtk3-classic
 pkgver=3.22.21
-pkgrel=1
+pkgrel=2
 pkgdesc="modified GTK3 library"
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 conflicts=(lib32-gtk3)
@@ -76,9 +76,8 @@ source=(
     # GTK source code.
     "https://download.gnome.org/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz"
 
-    # ArchLinux package files.
-    "settings.ini::https://git.archlinux.org/svntogit/packages.git/plain/trunk/settings.ini?h=packages/gtk3&id=$__arch_pkg_commit"
-    "gtk-query-immodules-3.0.hook::https://git.archlinux.org/svntogit/packages.git/plain/trunk/gtk-query-immodules-3.0.hook?h=packages/gtk3&id=$__arch_pkg_commit"
+    # ArchLinux hook.
+    'gtk-query-immodules-3.0-32.hook'
 )
 sha256sums=('7a1f4259502eea2f610df3ed8f82fc929fce1ebe92422327f54aa41ddf47e7f8'
             '58eb8466a76d6d48f32ec77365dc5436334e2aab9dd9df3ab59d5d55beb591cb'
@@ -104,92 +103,90 @@ sha256sums=('7a1f4259502eea2f610df3ed8f82fc929fce1ebe92422327f54aa41ddf47e7f8'
             '23cdd8b8034e73bb852d42feaabf4f995983a032be479d9ce84e5858c0bd5c41'
             '6481a8f2d2730f81d412906e5b1c595ce1771b52057b02089ebfacc7e355fd09'
             '1bd3c1a85cfb4db112cabb5379abb05a1a94fe43052d309d573493fca00e6b87'
-            '01fc1d81dc82c4a052ac6e25bf9a04e7647267cc3017bc91f9ce3e63e5eb9202'
-            'de46e5514ff39a7a65e01e485e874775ab1c0ad20b8e94ada43f4a6af1370845')
+            'c87e56504cd38d73748d12e87353680156cdeef30d082cca407d2375db821115')
 
 __patch_makefiles() {
 
-	__replace_string_in_file() {
-		sed -i".bak" "s/$1/$2/" "$3"
-		[[ "$(cat "$3")" != "$(cat "$3.bak")" ]] || return 1
-		rm "$3.bak"
-	}
+    __replace_string_in_file() {
+        sed -i".bak" "s/$1/$2/" "$3"
+        [[ "$(cat "$3")" != "$(cat "$3.bak")" ]] || return 1
+        rm "$3.bak"
+    }
 
-	__replace_string_in_file \
-		"SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples" \
-		"SRC_SUBDIRS = gdk gtk libgail-util modules demos" \
-		"Makefile.am"
+    __replace_string_in_file \
+        "SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples" \
+        "SRC_SUBDIRS = gdk gtk libgail-util modules demos" \
+        "Makefile.am"
 
-	__replace_string_in_file \
-		"SUBDIRS = po po-properties \$(SRC_SUBDIRS) docs m4macros build" \
-		"SUBDIRS = po \$(SRC_SUBDIRS) m4macros build" \
-		"Makefile.am"
+    __replace_string_in_file \
+        "SUBDIRS = po po-properties \$(SRC_SUBDIRS) docs m4macros build" \
+        "SUBDIRS = po \$(SRC_SUBDIRS) m4macros build" \
+        "Makefile.am"
 
-	__replace_string_in_file \
-		"SUBDIRS = gtk-demo widget-factory icon-browser" \
-		"SUBDIRS = widget-factory" \
-		"demos/Makefile.am"
+    __replace_string_in_file \
+        "SUBDIRS = gtk-demo widget-factory icon-browser" \
+        "SUBDIRS = widget-factory" \
+        "demos/Makefile.am"
 
-	__replace_string_in_file "SUBDIRS += cloudprint" "" "modules/printbackends/Makefile.am"
-	__replace_string_in_file "SUBDIRS += cups" 	     "" "modules/printbackends/Makefile.am"
-	__replace_string_in_file "gtk-update-icon-cache" "" "gtk/Makefile.am"
+    __replace_string_in_file "SUBDIRS += cloudprint" "" "modules/printbackends/Makefile.am"
+    __replace_string_in_file "SUBDIRS += cups" 	     "" "modules/printbackends/Makefile.am"
+    __replace_string_in_file "gtk-update-icon-cache" "" "gtk/Makefile.am"
 }
 
 __patch_gtk_code() {
-	for patchfile in $srcdir/*.patch; do
-		patch -d "gtk" -p 3 -i "$patchfile"
-	done
+    for patchfile in $srcdir/*.patch; do
+	    patch -d "gtk" -p 3 -i "$patchfile"
+    done
 
-	cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained.css"
-	cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained-dark.css"
+    cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained.css"
+    cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained-dark.css"
 }
 
 prepare() {
-	cd "$srcdir/gtk+-$pkgver"
+    cd "$srcdir/gtk+-$pkgver"
 
-	# Make building faster by skipping tests, code examples and unused elements.
-	__patch_makefiles
+    # Make building faster by skipping tests, code examples and unused elements.
+    __patch_makefiles
 
-	# Apply patches to GTK code.
-	__patch_gtk_code
+    # Apply patches to GTK code.
+    __patch_gtk_code
 
-	NOCONFIGURE=1 ./autogen.sh
+    NOCONFIGURE=1 ./autogen.sh
 }
 
 build() {
-	cd "$srcdir/gtk+-$pkgver"
+    cd "$srcdir/gtk+-$pkgver"
 
-	export CC='gcc -m32'
-	export CXX='/bin/false'
-	export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+    export CC='gcc -m32'
+    export CXX='/bin/false'
+    export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
 
-	CXX=/bin/false ./configure \
-	  --prefix=/usr \
-	  --libdir=/usr/lib32 \
-	  --sysconfdir=/etc \
-	  --localstatedir=/var \
-	  --enable-x11-backend \
-	  --enable-wayland-backend \
-	  --disable-schemas-compile \
-	  --disable-gtk-doc-html \
-	  --disable-installed-tests \
-	  --disable-libcanberra \
-	  --disable-maintainer-mode
+    CXX=/bin/false ./configure \
+      --prefix=/usr \
+      --libdir=/usr/lib32 \
+      --sysconfdir=/etc \
+      --localstatedir=/var \
+      --enable-x11-backend \
+      --enable-wayland-backend \
+      --disable-schemas-compile \
+      --disable-gtk-doc-html \
+      --disable-installed-tests \
+      --disable-libcanberra \
+      --disable-maintainer-mode
 
-	# https://bugzilla.gnome.org/show_bug.cgi?id=655517
-	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
-	make
+    # https://bugzilla.gnome.org/show_bug.cgi?id=655517
+    sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+    make
 }
 
 package() {
-	cd "$srcdir/gtk+-$pkgver"
+    cd "$srcdir/gtk+-$pkgver"
 
-	make DESTDIR="$pkgdir" install
-	mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
-	mv "${pkgdir}"/usr/bin/gtk-query-settings{,-32}
-	rm "${pkgdir}"/usr/bin/{gtk-{builder-tool,encode-symbolic-svg,launch},gtk3-widget-factory}
-	rm -rf "${pkgdir}"/{etc,usr/{include,share}}
+    make DESTDIR="$pkgdir" install
+    mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
+    mv "${pkgdir}"/usr/bin/gtk-query-settings{,-32}
+    rm "${pkgdir}"/usr/bin/{gtk-{builder-tool,encode-symbolic-svg,launch},gtk3-widget-factory}
+    rm -rf "${pkgdir}"/{etc,usr/{include,share}}
 
-	install -Dm644 ../settings.ini "$pkgdir/usr/share/gtk-3.0/settings.ini"
-	install -Dm644 ../gtk-query-immodules-3.0.hook "$pkgdir/usr/share/libalpm/hooks/gtk-query-immodules-3.0.hook"
+    install -Dm 644 ../gtk-query-immodules-3.0-32.hook "${pkgdir}"/usr/share/libalpm/hooks/gtk-query-immodules-3.0-32.hook
 }
