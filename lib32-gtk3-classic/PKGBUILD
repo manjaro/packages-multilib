@@ -1,0 +1,195 @@
+# Maintainer: Bernhard Landauer <oberon@manjaro.org>
+# Maintainer: Tomasz Gąsior <tomaszgasior.pl>
+
+__arch_pkg_commit="712b5a879d9389efba706c8817607fa65ac562e9"
+
+pkgname=lib32-gtk3-classic
+pkgver=3.22.21
+pkgrel=1
+pkgdesc="modified GTK3 library"
+url="https://github.com/TomaszGasior/gtk3-mushrooms"
+conflicts=(lib32-gtk3)
+provides=("lib32-gtk3=$pkgver")
+arch=(x86_64)
+license=(LGPL)
+depends=(
+    gtk3-classic
+#    lib32-atk
+    lib32-at-spi2-atk
+#    lib32-cairo
+    lib32-gdk-pixbuf2
+    lib32-json-glib
+    lib32-libcups
+    lib32-libepoxy
+    lib32-librsvg
+    lib32-libxcomposite
+    lib32-libxcursor
+#    lib32-libxdamage
+#    lib32-libxi
+    lib32-libxinerama
+    lib32-libxkbcommon
+    lib32-libxrandr
+#    lib32-mesa
+    lib32-pango
+    lib32-rest
+#    lib32-wayland
+    )
+optdepends=(
+    'gtk3-print-backends: printing'
+    'dconf: default GSettings backend'
+    'adwaita-icon-theme: default icon theme'
+    'cantarell-fonts: default font'
+    )
+makedepends=(
+    gcc-multilib
+    gobject-introspection
+    gtk-doc
+    )
+source=(
+    # Patch files.
+    "csd__clean-headerbar.patch"
+    "csd__disabled-by-default.patch"
+    "csd__headerbar-title.patch"
+    "csd__server-side-shadow.patch"
+    "file-chooser__cwd-default.patch"
+    "file-chooser__places-sidebar.patch"
+    "file-chooser__single-click.patch"
+    "file-chooser__typeahead.patch"
+    "fixes__no-at-bridge.patch"
+    "fixes__window-background.patch"
+    "icons__buttons.patch"
+    "icons__context-menus.patch"
+    "icons__file-chooser.patch"
+    "other__mnemonics-delay.patch"
+    "other__statusbar-size.patch"
+    "other__visible-scrollbar.patch"
+    "popovers__color-chooser.patch"
+    "popovers__file-chooser-list.patch"
+    "popovers__menu-button.patch"
+    "popovers__places-sidebar.patch"
+    "print-dialog__appearance.patch"
+    "print-dialog__default-previewer.patch"
+
+    # Theme CSS stylesheet.
+    "smaller-adwaita.css"
+
+    # GTK source code.
+    "https://download.gnome.org/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz"
+
+    # ArchLinux package files.
+    "settings.ini::https://git.archlinux.org/svntogit/packages.git/plain/trunk/settings.ini?h=packages/gtk3&id=$__arch_pkg_commit"
+    "gtk-query-immodules-3.0.hook::https://git.archlinux.org/svntogit/packages.git/plain/trunk/gtk-query-immodules-3.0.hook?h=packages/gtk3&id=$__arch_pkg_commit"
+)
+sha256sums=('7a1f4259502eea2f610df3ed8f82fc929fce1ebe92422327f54aa41ddf47e7f8'
+            '58eb8466a76d6d48f32ec77365dc5436334e2aab9dd9df3ab59d5d55beb591cb'
+            'a97f8b588ccfd55e78bccbbfa55b3ca62d5e1732cc815852b31ba9a6fa722494'
+            '831e67a278152e93561658f364a10251ed07a9d05c60828b7ec1ab933ebe67b0'
+            '5f6dded28c77cfbd1c58f8c334c8544fc84093124f385f87dcf05eeb045bbd8b'
+            '4d2fdb331e105c8512d3b2ad16b8c512b372fa3c3658c6881b1f89c9d78da7fb'
+            '9d07b362be00fa493642f680feeebc49cfae28f8f88c0e8c6de13b15323dacc9'
+            'fdc2c3d63c0fc94934c10a99189062955e8f40acd3bb883b739faefa86344c1f'
+            '103f86c0f03a1c210a56a44434c19b9f64f8c376bcead689a04919b26b0f4d4c'
+            '4917fcb99dfe189f0f834a143bf85abb77f9ac0b8ec7a881aa4c8c1b897f6524'
+            '769ad0e70a6ac01c203417e50f06d64dbc9fd260707abf5289642ca5a4d4e7f4'
+            'a2af0c7f29e9ae5e2a669f4ad131acab8d5cbd5d47cc3914750db25b8eeefe1e'
+            'b978504d311fb87505e1787a07c246310e3389840082f326e266193ad908c0f1'
+            'cf1e95e4a8c9d001d919fddeab9260b39e32739fe66440138dfc70182df5297a'
+            '7908611ae7f85a37542b1f1558f46f1d5f35fa1996551d4e61c163569ea3b0ac'
+            'fa069d6ac463e5759e0073bb623ce3b495bd7a074bb13dbc25a12b7ce46f2024'
+            '64776101101b0ddc256e32a318f35526eb5e41b48aba7b7d30c39ef76db77ace'
+            'e8d53849a3277fa0f0f729be2197970f28cd809070021d2f5ae1987df8250171'
+            'ae3da3618e294dace5a2459a9e3bfaa3bd50be034449eec2828eaa2e217ce851'
+            'a55a56aeb72715cb6ae39e440e01ff7492e484400f6e063368b74abf59d44fdb'
+            'b479fe0a82db21475fde30d9daad4360552b67957479773a1216058c7ff46629'
+            '23cdd8b8034e73bb852d42feaabf4f995983a032be479d9ce84e5858c0bd5c41'
+            '6481a8f2d2730f81d412906e5b1c595ce1771b52057b02089ebfacc7e355fd09'
+            '1bd3c1a85cfb4db112cabb5379abb05a1a94fe43052d309d573493fca00e6b87'
+            '01fc1d81dc82c4a052ac6e25bf9a04e7647267cc3017bc91f9ce3e63e5eb9202'
+            'de46e5514ff39a7a65e01e485e874775ab1c0ad20b8e94ada43f4a6af1370845')
+
+__patch_makefiles() {
+
+	__replace_string_in_file() {
+		sed -i".bak" "s/$1/$2/" "$3"
+		[[ "$(cat "$3")" != "$(cat "$3.bak")" ]] || return 1
+		rm "$3.bak"
+	}
+
+	__replace_string_in_file \
+		"SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples" \
+		"SRC_SUBDIRS = gdk gtk libgail-util modules demos" \
+		"Makefile.am"
+
+	__replace_string_in_file \
+		"SUBDIRS = po po-properties \$(SRC_SUBDIRS) docs m4macros build" \
+		"SUBDIRS = po \$(SRC_SUBDIRS) m4macros build" \
+		"Makefile.am"
+
+	__replace_string_in_file \
+		"SUBDIRS = gtk-demo widget-factory icon-browser" \
+		"SUBDIRS = widget-factory" \
+		"demos/Makefile.am"
+
+	__replace_string_in_file "SUBDIRS += cloudprint" "" "modules/printbackends/Makefile.am"
+	__replace_string_in_file "SUBDIRS += cups" 	     "" "modules/printbackends/Makefile.am"
+	__replace_string_in_file "gtk-update-icon-cache" "" "gtk/Makefile.am"
+}
+
+__patch_gtk_code() {
+	for patchfile in $srcdir/*.patch; do
+		patch -d "gtk" -p 3 -i "$patchfile"
+	done
+
+	cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained.css"
+	cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained-dark.css"
+}
+
+prepare() {
+	cd "$srcdir/gtk+-$pkgver"
+
+	# Make building faster by skipping tests, code examples and unused elements.
+	__patch_makefiles
+
+	# Apply patches to GTK code.
+	__patch_gtk_code
+
+	NOCONFIGURE=1 ./autogen.sh
+}
+
+build() {
+	cd "$srcdir/gtk+-$pkgver"
+
+	export CC='gcc -m32'
+	export CXX='/bin/false'
+	export PKG_CONFIG_PATH='/usr/lib32/pkgconfig'
+
+	CXX=/bin/false ./configure \
+	  --prefix=/usr \
+	  --libdir=/usr/lib32 \
+	  --sysconfdir=/etc \
+	  --localstatedir=/var \
+	  --enable-x11-backend \
+	  --enable-wayland-backend \
+	  --disable-schemas-compile \
+	  --disable-gtk-doc-html \
+	  --disable-installed-tests \
+	  --disable-libcanberra \
+	  --disable-maintainer-mode
+
+	# https://bugzilla.gnome.org/show_bug.cgi?id=655517
+	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+	make
+}
+
+package() {
+	cd "$srcdir/gtk+-$pkgver"
+
+	make DESTDIR="$pkgdir" install
+	mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
+	mv "${pkgdir}"/usr/bin/gtk-query-settings{,-32}
+	rm "${pkgdir}"/usr/bin/{gtk-{builder-tool,encode-symbolic-svg,launch},gtk3-widget-factory}
+	rm -rf "${pkgdir}"/{etc,usr/{include,share}}
+
+	install -Dm644 ../settings.ini "$pkgdir/usr/share/gtk-3.0/settings.ini"
+	install -Dm644 ../gtk-query-immodules-3.0.hook "$pkgdir/usr/share/libalpm/hooks/gtk-query-immodules-3.0.hook"
+}

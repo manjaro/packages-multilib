@@ -1,0 +1,18 @@
+diff -U 5 -r -Z -B ./org/gtk/ui/gtkstatusbar.ui ./mod/gtk/ui/gtkstatusbar.ui
+--- ./org/gtk/ui/gtkstatusbar.ui	2017-07-19 04:55:39.000000000 +0200
++++ ./mod/gtk/ui/gtkstatusbar.ui	2017-07-30 13:30:05.083475912 +0200
+@@ -3,12 +3,12 @@
+   <!-- interface-requires gtk+ 3.10 -->
+   <template class="GtkStatusbar" parent="GtkBox">
+     <property name="spacing">2</property>
+     <property name="margin-start">10</property>
+     <property name="margin-end">10</property>
+-    <property name="margin-top">6</property>
+-    <property name="margin-bottom">6</property>
++    <property name="margin-top">1</property>
++    <property name="margin-bottom">1</property>
+     <child>
+       <object class="GtkFrame" id="frame">
+         <property name="visible">1</property>
+         <property name="shadow-type">none</property>
+         <child>
