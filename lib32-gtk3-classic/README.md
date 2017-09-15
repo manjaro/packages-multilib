@@ -1,9 +1,9 @@
-﻿"GTK3-mushrooms" by Tomasz Gąsior)
+﻿"GTK3-classic" by Tomasz Gąsior)
 ===
 
-This is a set of patches for GTK3 library that makes it better for me and maybe for you too. ;-) I haven't wide knowledge about programming in C, so quality of this patches can be not good. But it works! See list of patches below.
+This is a set of patches for GTK3 library that makes it better for us and maybe for you too. ;-)
 
-This package is based on official GTK3 package from Arch Linux. In my version library is compiled without Broadway backend, documentation and example applications. Using this package with GNOME desktop is not recommended. It's for classic GTK-based environments like MATE or XFCE.
+This package is based on official GTK3 package from Manjaro Linux. The library is compiled without Broadway backend, documentation and example applications. Using this package with GNOME desktop is not recommended. It's for classic GTK-based environments like MATE or XFCE.
 
 Client Side Decorations
 ---
