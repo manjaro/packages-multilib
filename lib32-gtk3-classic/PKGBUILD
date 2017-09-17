@@ -2,11 +2,13 @@
 # Maintainer: Tomasz Gąsior <tomaszgasior.pl>
 
 __arch_pkg_commit="712b5a879d9389efba706c8817607fa65ac562e9"
+_repo=gtk3-mushrooms
+_commit=d043f0d1d441b753677e9da8ef936331764c072a
 
 pkgname=lib32-gtk3-classic
 pkgver=3.22.21
-pkgrel=2
-pkgdesc="modified GTK3 library"
+pkgrel=3
+pkgdesc="GTK3 library modified for classic GTK-based desktops."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 conflicts=(lib32-gtk3)
 provides=("lib32-gtk3=$pkgver")
@@ -41,69 +43,22 @@ optdepends=(
     'cantarell-fonts: default font'
     )
 makedepends=(
-    gcc-multilib
-    gobject-introspection
-    gtk-doc
+    'git'
+    'gcc-multilib'
+    'gobject-introspection'
+    'gtk-doc'
     )
 source=(
-    # Patch files.
-    "csd__clean-headerbar.patch"
-    "csd__disabled-by-default.patch"
-    "csd__headerbar-title.patch"
-    "csd__server-side-shadow.patch"
-    "file-chooser__cwd-default.patch"
-    "file-chooser__places-sidebar.patch"
-    "file-chooser__single-click.patch"
-    "file-chooser__typeahead.patch"
-    "fixes__no-at-bridge.patch"
-    "fixes__window-background.patch"
-    "icons__buttons.patch"
-    "icons__context-menus.patch"
-    "icons__file-chooser.patch"
-    "other__mnemonics-delay.patch"
-    "other__statusbar-size.patch"
-    "other__visible-scrollbar.patch"
-    "popovers__color-chooser.patch"
-    "popovers__file-chooser-list.patch"
-    "popovers__menu-button.patch"
-    "popovers__places-sidebar.patch"
-    "print-dialog__appearance.patch"
-    "print-dialog__default-previewer.patch"
-
-    # Theme CSS stylesheet.
-    "smaller-adwaita.css"
-
     # GTK source code.
     "https://download.gnome.org/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz"
-
     # ArchLinux hook.
     'gtk-query-immodules-3.0-32.hook'
+    # gtk3-mushrooms patches
+    "git+$url.git#commit=$_commit"
 )
-sha256sums=('7a1f4259502eea2f610df3ed8f82fc929fce1ebe92422327f54aa41ddf47e7f8'
-            '58eb8466a76d6d48f32ec77365dc5436334e2aab9dd9df3ab59d5d55beb591cb'
-            'a97f8b588ccfd55e78bccbbfa55b3ca62d5e1732cc815852b31ba9a6fa722494'
-            '831e67a278152e93561658f364a10251ed07a9d05c60828b7ec1ab933ebe67b0'
-            '5f6dded28c77cfbd1c58f8c334c8544fc84093124f385f87dcf05eeb045bbd8b'
-            '4d2fdb331e105c8512d3b2ad16b8c512b372fa3c3658c6881b1f89c9d78da7fb'
-            '9d07b362be00fa493642f680feeebc49cfae28f8f88c0e8c6de13b15323dacc9'
-            'fdc2c3d63c0fc94934c10a99189062955e8f40acd3bb883b739faefa86344c1f'
-            '103f86c0f03a1c210a56a44434c19b9f64f8c376bcead689a04919b26b0f4d4c'
-            '4917fcb99dfe189f0f834a143bf85abb77f9ac0b8ec7a881aa4c8c1b897f6524'
-            '769ad0e70a6ac01c203417e50f06d64dbc9fd260707abf5289642ca5a4d4e7f4'
-            'a2af0c7f29e9ae5e2a669f4ad131acab8d5cbd5d47cc3914750db25b8eeefe1e'
-            'b978504d311fb87505e1787a07c246310e3389840082f326e266193ad908c0f1'
-            'cf1e95e4a8c9d001d919fddeab9260b39e32739fe66440138dfc70182df5297a'
-            '7908611ae7f85a37542b1f1558f46f1d5f35fa1996551d4e61c163569ea3b0ac'
-            'fa069d6ac463e5759e0073bb623ce3b495bd7a074bb13dbc25a12b7ce46f2024'
-            '64776101101b0ddc256e32a318f35526eb5e41b48aba7b7d30c39ef76db77ace'
-            'e8d53849a3277fa0f0f729be2197970f28cd809070021d2f5ae1987df8250171'
-            'ae3da3618e294dace5a2459a9e3bfaa3bd50be034449eec2828eaa2e217ce851'
-            'a55a56aeb72715cb6ae39e440e01ff7492e484400f6e063368b74abf59d44fdb'
-            'b479fe0a82db21475fde30d9daad4360552b67957479773a1216058c7ff46629'
-            '23cdd8b8034e73bb852d42feaabf4f995983a032be479d9ce84e5858c0bd5c41'
-            '6481a8f2d2730f81d412906e5b1c595ce1771b52057b02089ebfacc7e355fd09'
-            '1bd3c1a85cfb4db112cabb5379abb05a1a94fe43052d309d573493fca00e6b87'
-            'c87e56504cd38d73748d12e87353680156cdeef30d082cca407d2375db821115')
+sha256sums=('1bd3c1a85cfb4db112cabb5379abb05a1a94fe43052d309d573493fca00e6b87'
+            'c87e56504cd38d73748d12e87353680156cdeef30d082cca407d2375db821115'
+            'SKIP')
 
 __patch_makefiles() {
 
@@ -134,16 +89,16 @@ __patch_makefiles() {
 }
 
 __patch_gtk_code() {
-    for patchfile in $srcdir/*.patch; do
-	    patch -d "gtk" -p 3 -i "$patchfile"
+    for patchfile in $srcdir/$_repo/*.patch; do
+        patch -d "gtk" -p 3 -i "$patchfile"
     done
 
-    cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained.css"
-    cat "$srcdir/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained-dark.css"
+    cat "$srcdir/$_repo/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained.css"
+    cat "$srcdir/$_repo/smaller-adwaita.css" >> "gtk/theme/Adwaita/gtk-contained-dark.css"
 }
 
 prepare() {
-    cd "$srcdir/gtk+-$pkgver"
+    cd gtk+-$pkgver
 
     # Make building faster by skipping tests, code examples and unused elements.
     __patch_makefiles
@@ -155,7 +110,7 @@ prepare() {
 }
 
 build() {
-    cd "$srcdir/gtk+-$pkgver"
+    cd gtk+-$pkgver
 
     export CC='gcc -m32'
     export CXX='/bin/false'
@@ -180,7 +135,7 @@ build() {
 }
 
 package() {
-    cd "$srcdir/gtk+-$pkgver"
+    cd gtk+-$pkgver
 
     make DESTDIR="$pkgdir" install
     mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
