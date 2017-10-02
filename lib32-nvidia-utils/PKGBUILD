@@ -5,8 +5,8 @@
 _pkgbasename=nvidia-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-utils' 'lib32-opencl-nvidia')
-pkgver=375.82
-pkgrel=1
+pkgver=384.90
+pkgrel=2
 epoch=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -18,7 +18,7 @@ _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 durl="http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}"
 #durl="http://developer.download.nvidia.com/assets/opengl/369.00"
 source=("${durl}/NVIDIA-Linux-x86-${pkgver}.run")
-sha256sums=('620629a35b1773e7eefddb9ea7982a4a75ecf65c1ea6f7ba83b94a84b269f561')
+sha256sums=('97a667de9fd7fdaa2f47b75d4049394224788931c2df2848de3f5553de810057')
 
 create_links() {
     # create soname links
@@ -38,7 +38,7 @@ package_lib32-opencl-nvidia() {
     pkgdesc="OpenCL implemention for NVIDIA (32-bit)"
     depends=('lib32-zlib' 'lib32-gcc-libs')
     optdepends=('opencl-headers: headers necessary for OpenCL development')
-    provides=('lib32-opencl-driver')
+    provides=('lib32-opencl-driver' "lib32-opencl-nvidia=$pkgver")
     cd "${_pkg}"
 
     # OpenCL
@@ -56,7 +56,7 @@ package_lib32-nvidia-utils() {
     pkgdesc="NVIDIA drivers utilities (32-bit)"
     depends=('lib32-zlib' 'lib32-gcc-libs' 'lib32-libglvnd' 'mhwd' 'nvidia-utils')
     optdepends=('lib32-opencl-nvidia')
-    provides=('lib32-nvidia-libgl')
+    provides=('lib32-vulkan-driver' 'lib32-opengl-driver' 'lib32-nvidia-libgl' "lib32-nvidia-utils=$pkgver")
     conflicts=('lib32-nvidia-libgl')
     replaces=('lib32-nvidia-libgl')
     install="${pkgname}.install"
@@ -70,8 +70,8 @@ package_lib32-nvidia-utils() {
     #ln -s "libGLX_nvidia.so.${pkgver}" "${pkgdir}/usr/lib32/libGLX_indirect.so.0"
 
     # Wayland
-    install -D -m755 "libnvidia-egl-wayland.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.${pkgver}"
-    ln -s "libnvidia-egl-wayland.so.${pkgver}" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.0"
+    install -D -m755 "libnvidia-egl-wayland.so.1.0.1" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1.0.1"
+    ln -s "libnvidia-egl-wayland.so.1.0.1" "${pkgdir}/usr/lib32/libnvidia-egl-wayland.so.1"
 
     # OpenGL libraries
     install -D -m755 "libGL.so.1.0.0" "${pkgdir}/usr/lib32/nvidia/libGL.so.1.0.0"

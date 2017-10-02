@@ -5,7 +5,7 @@
 _pkgbasename=nvidia-340xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-340xx-utils' 'lib32-opencl-nvidia-340xx')
-pkgver=340.102
+pkgver=340.104
 pkgrel=1
 arch=('x86_64')
 url="http://www.nvidia.com/"
@@ -15,7 +15,7 @@ options=('!strip')
 _arch='x86'
 _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 source=("http://us.download.nvidia.com/XFree86/Linux-${_arch}/${pkgver}/${_pkg}.run")
-sha256sums=('61b13d5dae0f6f5d788a4d8c4c98e8d971d19cb90b606058060d007946248828')
+sha256sums=('e39015f8e2c6c87037be340fd1899f703ac15356c5694ad8187cd67e71491cd1')
 
 create_links() {
     # create soname links
