@@ -6,8 +6,8 @@ _commit=0c2a04f3237639f8da136f934548be987f344836
 __arch_pkg_commit="712b5a879d9389efba706c8817607fa65ac562e9"
 
 pkgname=lib32-gtk3-classic
-pkgver=3.22.21
-pkgrel=4
+pkgver=3.22.24
+pkgrel=1
 pkgdesc="GTK3 library modified for classic GTK-based desktops."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 conflicts=(lib32-gtk3)
@@ -56,7 +56,7 @@ source=(
     # gtk3-mushrooms patches
     "git+$url.git#commit=$_commit"
 )
-sha256sums=('1bd3c1a85cfb4db112cabb5379abb05a1a94fe43052d309d573493fca00e6b87'
+sha256sums=('cbb16e4cfc928ab8f5f22f7290616f95f6ebc8c97cc724a2007b07ced833592b'
             'c87e56504cd38d73748d12e87353680156cdeef30d082cca407d2375db821115'
             'SKIP')
 
