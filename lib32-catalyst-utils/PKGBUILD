@@ -6,7 +6,7 @@ _pkgsourcename=catalyst-utils
 pkgbase=lib32-$_pkgsourcename
 pkgname=("lib32-$_pkgsourcename" 'lib32-opencl-catalyst')
 pkgver=15.201.1151
-pkgrel=6
+pkgrel=7
 epoch=1
 _pkgver=15.201.1151
 _tarball=15.9-linux-installer-15.201.1151
@@ -102,10 +102,11 @@ package_lib32-catalyst-utils() {
 
 package_lib32-opencl-catalyst() {
       pkgdesc="OpenCL implemention from AMD (32-bit)"
-      provides=('lib32-libcl')
-      conflicts=('lib32-libcl' 'lib32-opencl-catalyst-legacy' 'lib32-opencl-catalyst-13.4')
+      provides=('lib32-opencl-driver')
+      conflicts=('lib32-opencl-amd' 'lib32-opencl-catalyst-legacy' 'lib32-opencl-catalyst-13.4')
       depends=('lib32-gcc-libs')
-      optdepends=('opencl-headers: headers necessary for OpenCL development')
+      optdepends=('opencl-headers: headers necessary for OpenCL development'
+                  'lib32-opencl-icd-loader: OpenCL ICD Bindings (32-bit)')
       
       install -dm755 "${pkgdir}"/usr/lib32
       install -dm755 "${pkgdir}/etc/OpenCL/vendors"
@@ -115,8 +116,8 @@ package_lib32-opencl-catalyst() {
       cd ${srcdir}/fglrx-$_pkgver/archive_files/arch/${_ARCHDIR}
       install -m644 etc/OpenCL/vendors/amdocl*.icd "${pkgdir}/etc/OpenCL/vendors/"
       install -m755 usr/lib/libamdocl*.so "${pkgdir}/usr/lib32/"
-      install -m755 usr/lib/libOpenCL.so.1 "${pkgdir}/usr/lib32/"
-      ln -s libOpenCL.so.1 "${pkgdir}/usr/lib32/libOpenCL.so"
+#      install -m755 usr/lib/libOpenCL.so.1 "${pkgdir}/usr/lib32/"        #lib32-opencl-icd-loader provides this
+#      ln -s libOpenCL.so.1 "${pkgdir}/usr/lib32/libOpenCL.so"
       # license
       install -m644 ${srcdir}/fglrx-$_pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
 }
