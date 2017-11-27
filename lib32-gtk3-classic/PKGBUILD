@@ -3,22 +3,23 @@
 
 _repo=gtk3-mushrooms
 _commit=0c2a04f3237639f8da136f934548be987f344836
-__arch_pkg_commit="712b5a879d9389efba706c8817607fa65ac562e9"
+__arch_pkg_commit=ced279e9020925d34991926230a754bd1650da2f
 
 pkgname=lib32-gtk3-classic
-pkgver=3.22.21
-pkgrel=4
+pkgver=3.22.26
+pkgrel=2
 pkgdesc="GTK3 library modified for classic GTK-based desktops."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
-conflicts=(lib32-gtk3)
-provides=("lib32-gtk3=$pkgver")
+conflicts=(gtk3 gtk3-print-backends)
+provides=(gtk3=$pkgver gtk3-print-backends)
+replaces=("gtk3-print-backends<=3.22.26-1")
 arch=(x86_64)
 license=(LGPL)
 depends=(
     gtk3-classic
-#    lib32-atk
     lib32-at-spi2-atk
-#    lib32-cairo
+    lib32-colord
+    lib32-dbus
     lib32-gdk-pixbuf2
     lib32-json-glib
     lib32-libcups
@@ -26,15 +27,11 @@ depends=(
     lib32-librsvg
     lib32-libxcomposite
     lib32-libxcursor
-#    lib32-libxdamage
-#    lib32-libxi
     lib32-libxinerama
     lib32-libxkbcommon
     lib32-libxrandr
-#    lib32-mesa
     lib32-pango
     lib32-rest
-#    lib32-wayland
     )
 optdepends=(
     'gtk3-print-backends: printing'
@@ -50,24 +47,65 @@ makedepends=(
     )
 source=(
     # GTK source code.
-    "https://download.gnome.org/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz"
+    "https://github.com/GNOME/gtk/archive/$pkgver.tar.gz"
     # ArchLinux hook.
     'gtk-query-immodules-3.0-32.hook'
     # gtk3-mushrooms patches
     "git+$url.git#commit=$_commit"
 )
-sha256sums=('1bd3c1a85cfb4db112cabb5379abb05a1a94fe43052d309d573493fca00e6b87'
+sha256sums=('6d952d9962aa5105fd5b3549d6bba115e6b4081e00a62079304989cc7787bbb5'
             'c87e56504cd38d73748d12e87353680156cdeef30d082cca407d2375db821115'
             'SKIP')
 
+__patch_makefiles() {
+    __replace_string_in_file() {
+        sed -i".bak" "s/$1/$2/" "$3"
+        rm "$3.bak"
+    }
+
+    __replace_string_in_file \
+        "SRC_SUBDIRS = gdk gtk libgail-util modules demos tests testsuite examples" \
+        "SRC_SUBDIRS = gdk gtk libgail-util modules demos" \
+        "Makefile.am"
+
+    __replace_string_in_file \
+        "SUBDIRS = po po-properties \$(SRC_SUBDIRS) docs m4macros build" \
+        "SUBDIRS = po \$(SRC_SUBDIRS) m4macros build" \
+        "Makefile.am"
+
+    __replace_string_in_file \
+        "SUBDIRS = gtk-demo widget-factory icon-browser" \
+        "SUBDIRS = widget-factory" \
+        "demos/Makefile.am"
+
+	__replace_string_in_file \
+		"gtk-update-icon-cache" \
+		"" \
+		"gtk/Makefile.am"
+}
+
+__patch_gtk_code() {
+    for patch_file in $srcdir/$_repo/*.patch; do
+        patch -d "gtk" -p 3 -i "$patch_file"
+    done
+
+    cat "$srcdir/smaller-adwaita.css" | tee -a gtk/theme/Adwaita/gtk-contained{,-dark}.css > /dev/null
+}
+
 prepare() {
-    cd gtk+-$pkgver
-    $srcdir/$_repo/do-mushrooms.sh
+    cd "$srcdir/gtk-$pkgver"
+
+    # Make building faster by skipping tests, code examples and unused elements.
+    __patch_makefiles
+
+    # Apply patches to GTK code.
+    __patch_gtk_code
+
     NOCONFIGURE=1 ./autogen.sh
 }
 
 build() {
-    cd gtk+-$pkgver
+    cd "$srcdir/gtk-$pkgver"
 
     export CC='gcc -m32'
     export CXX='/bin/false'
@@ -90,7 +128,7 @@ build() {
 }
 
 package() {
-    cd gtk+-$pkgver
+    cd "$srcdir/gtk-$pkgver"
 
     make DESTDIR="$pkgdir" install
     mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
