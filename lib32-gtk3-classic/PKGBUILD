@@ -2,7 +2,7 @@
 # Maintainer: Tomasz Gąsior <tomaszgasior.pl>
 
 _repo=gtk3-mushrooms
-_commit=0c2a04f3237639f8da136f934548be987f344836
+_commit=2068ccbbe6d0cadc5db3777686ca9fb431ff0002
 __arch_pkg_commit=ced279e9020925d34991926230a754bd1650da2f
 
 pkgname=lib32-gtk3-classic
@@ -34,7 +34,6 @@ depends=(
     lib32-rest
     )
 optdepends=(
-    'gtk3-print-backends: printing'
     'dconf: default GSettings backend'
     'adwaita-icon-theme: default icon theme'
     'cantarell-fonts: default font'
@@ -105,7 +104,7 @@ prepare() {
 }
 
 build() {
-    cd "$srcdir/gtk-$pkgver"
+    cd gtk-$pkgver
 
     export CC='gcc -m32'
     export CXX='/bin/false'
@@ -128,7 +127,7 @@ build() {
 }
 
 package() {
-    cd "$srcdir/gtk-$pkgver"
+    cd gtk-$pkgver
 
     make DESTDIR="$pkgdir" install
     mv "${pkgdir}"/usr/bin/gtk-query-immodules-3.0{,-32}
