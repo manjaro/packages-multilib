@@ -7,12 +7,11 @@ __arch_pkg_commit=ced279e9020925d34991926230a754bd1650da2f
 
 pkgname=lib32-gtk3-classic
 pkgver=3.22.26
-pkgrel=2
+pkgrel=2.1
 pkgdesc="GTK3 library modified for classic GTK-based desktops."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
-conflicts=(gtk3 gtk3-print-backends)
-provides=(gtk3=$pkgver gtk3-print-backends)
-replaces=("gtk3-print-backends<=3.22.26-1")
+conflicts=(lib32-gtk3)
+provides=("lib32-gtk3=$pkgver")
 arch=(x86_64)
 license=(LGPL)
 depends=(
