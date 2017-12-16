@@ -9,7 +9,6 @@ pkgver=15.201.1151
 pkgrel=7
 epoch=1
 _pkgver=15.201.1151
-_tarball=15.9-linux-installer-15.201.1151
 pkgdesc="AMD/ATI catalyst driver utilities and libraries. (32-bit)"
 url="http://www.amd.com"
 arch=(x86_64)
@@ -18,7 +17,7 @@ groups=('lib32')
 depends=('lib32-libxext' 'lib32-libdrm' 'lib32-mesa' 'catalyst-utils' 'mhwd')
 conflicts=('lib32-catalyst-legacy-utils' 'lib32-catalyst-13.4-utils')
 install="${pkgname}.install"
-source=(http://www2.ati.com/drivers/linux/amd-catalyst-${_tarball}-x86.x86_64.zip
+source=(http://www2.ati.com/drivers/linux/amd-catalyst-15.9-linux-installer-15.201.1151-x86.x86_64.zip
         #https://launchpad.net/ubuntu/+archive/primary/+files/fglrx-installer_${_tarball}.orig.tar.gz
         lib32-catalyst.sh
 	LICENSE.TXT)
@@ -44,17 +43,17 @@ prepare() {
 }
 
 package_lib32-catalyst-utils() {
-      cd ${srcdir}
-      install -D -m755 lib32-catalyst.sh ${pkgdir}/etc/profile.d/lib32-catalyst.sh
-      cd ${srcdir}/fglrx-$_pkgver/archive_files/arch/x86/usr
-      install -dm755 ${pkgdir}/usr/lib32
-      install -dm755 ${pkgdir}/usr/lib32/fglrx
-      install -dm755 ${pkgdir}/usr/lib32/dri
-      install -dm755 ${pkgdir}/usr/lib32/xorg/modules/dri
-      install -m755 lib/*.so* ${pkgdir}/usr/lib32
-      install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1.2
-      ln -sf libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so.1
-      ln -sf libGL.so.1.2 ${pkgdir}/usr/lib32/fglrx/libGL.so
+      cd "${srcdir}"
+      install -D -m755 lib32-catalyst.sh "${pkgdir}/etc/profile.d/lib32-catalyst.sh"
+      cd "${srcdir}/fglrx-$_pkgver/archive_files/arch/x86/usr"
+      install -dm755 "${pkgdir}/usr/lib32"
+      install -dm755 "${pkgdir}/usr/lib32/fglrx"
+      install -dm755 "${pkgdir}/usr/lib32/dri"
+      install -dm755 "${pkgdir}/usr/lib32/xorg/modules/dri"
+      install -m755 lib/*.so* "${pkgdir}/usr/lib32"
+      install -m755 X11R6/lib/fglrx/fglrx-libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx/libGL.so.1.2"
+      ln -sf libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx/libGL.so.1"
+      ln -sf libGL.so.1.2 "${pkgdir}/usr/lib32/fglrx/libGL.so"
 
       # GLX extension module for X
       install -D -m755 ../../../xpic/usr/X11R6/lib/modules/extensions/fglrx/fglrx-libglx.so "${pkgdir}/usr/lib32/fglrx/xorg/libglx.so.1"
@@ -75,14 +74,14 @@ package_lib32-catalyst-utils() {
       ln -s libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv2.so.2"
       ln -s libGLESv2.so.2.0.0 "${pkgdir}/usr/lib32/fglrx/libGLESv2.so"
 
-      install -m755 X11R6/lib/libAMDXvBA.so.1.0 ${pkgdir}/usr/lib32
-      install -m755 X11R6/lib/libatiadlxx.so ${pkgdir}/usr/lib32
-      install -m755 X11R6/lib/libfglrx_dm.so.1.0 ${pkgdir}/usr/lib32
-      install -m755 X11R6/lib/libXvBAW.so.1.0 ${pkgdir}/usr/lib32
-      install -m755 X11R6/lib/modules/dri/*.so ${pkgdir}/usr/lib32/xorg/modules/dri
-      ln -snf /usr/lib32/xorg/modules/dri/fglrx_dri.so ${pkgdir}/usr/lib32/dri/fglrx_dri.so
+      install -m755 X11R6/lib/libAMDXvBA.so.1.0 "${pkgdir}/usr/lib32"
+      install -m755 X11R6/lib/libatiadlxx.so "${pkgdir}/usr/lib32"
+      install -m755 X11R6/lib/libfglrx_dm.so.1.0 "${pkgdir}/usr/lib32"
+      install -m755 X11R6/lib/libXvBAW.so.1.0 "${pkgdir}/usr/lib32"
+      install -m755 X11R6/lib/modules/dri/*.so "${pkgdir}/usr/lib32/xorg/modules/dri"
+      ln -snf /usr/lib32/xorg/modules/dri/fglrx_dri.so "${pkgdir}/usr/lib32/dri/fglrx_dri.so"
 
-      cd $pkgdir/usr/lib32
+      cd "$pkgdir/usr/lib32"
       ln -sf libfglrx_dm.so.1.0 libfglrx_dm.so.1
       ln -sf libAMDXvBA.so.1.0 libAMDXvBA.so.1
       ln -sf libXvBAW.so.1.0 libXvBAW.so.1
@@ -90,8 +89,8 @@ package_lib32-catalyst-utils() {
       ln -sf libatiuki.so.1.0 libatiuki.so
 
       # License
-      install -m755 -d ${pkgdir}/usr/share/licenses/${pkgname}
-      install -m644 ${srcdir}/fglrx-$_pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      install -m755 -d "${pkgdir}/usr/share/licenses/${pkgname}"
+      install -m644 "${srcdir}/fglrx-$_pkgver/archive_files/LICENSE.TXT" "${pkgdir}/usr/share/licenses/${pkgname}"
 
       install -dm 755 "${pkgdir}"/etc/ld.so.conf.d
       echo -e '/usr/lib32/fglrx/' > "${pkgdir}"/etc/ld.so.conf.d/00-lib32-fglrx.conf
@@ -113,11 +112,11 @@ package_lib32-opencl-catalyst() {
       install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
       
       _ARCHDIR="x86"
-      cd ${srcdir}/fglrx-$_pkgver/archive_files/arch/${_ARCHDIR}
+      cd "${srcdir}/fglrx-$_pkgver/archive_files/arch/${_ARCHDIR}"
       install -m644 etc/OpenCL/vendors/amdocl*.icd "${pkgdir}/etc/OpenCL/vendors/"
       install -m755 usr/lib/libamdocl*.so "${pkgdir}/usr/lib32/"
 #      install -m755 usr/lib/libOpenCL.so.1 "${pkgdir}/usr/lib32/"        #lib32-opencl-icd-loader provides this
 #      ln -s libOpenCL.so.1 "${pkgdir}/usr/lib32/libOpenCL.so"
       # license
-      install -m644 ${srcdir}/fglrx-$_pkgver/archive_files/LICENSE.TXT ${pkgdir}/usr/share/licenses/${pkgname}
+      install -m644 "${srcdir}/fglrx-$_pkgver/archive_files/LICENSE.TXT" "${pkgdir}/usr/share/licenses/${pkgname}"
 }
