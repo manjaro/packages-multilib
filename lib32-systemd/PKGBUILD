@@ -6,10 +6,10 @@
 pkgname=lib32-systemd
 _pkgbasename=systemd
 # latest commit on stable branch
-_commit='7909254c7a8ee09d91b8b21fd779320b3e2fe716'
+_commit='738ab7502afb7663d9aacdd73e79025aa7cd0a9b'
 # Bump this to latest major release for signed tag verification,
 # the commit count is handled by pkgver() function.
-pkgver=237.64
+pkgver=238.0
 pkgrel=1
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
@@ -21,11 +21,12 @@ makedepends=('gcc-multilib' 'git' 'gperf' 'intltool' 'lib32-acl' 'lib32-bzip2'
              'lib32-gnutls' 'lib32-libelf' 'lib32-libidn' 'lib32-pcre2'
              'libxslt' 'meson')
 options=('strip')
-validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4')  # Lennart Poettering <lennart@poettering.net>
+validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'  # Lennart Poettering <lennart@poettering.net>
+              '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E') # Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
 source=('git://github.com/systemd/systemd-stable.git'
         'git://github.com/systemd/systemd.git') # pull in for tags, backports & reverts
 sha256sums=('SKIP'
-         'SKIP')
+            'SKIP')
 
 _backports=(
 )
