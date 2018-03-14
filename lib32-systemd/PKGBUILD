@@ -10,7 +10,7 @@ _commit='738ab7502afb7663d9aacdd73e79025aa7cd0a9b'
 # Bump this to latest major release for signed tag verification,
 # the commit count is handled by pkgver() function.
 pkgver=238.0
-pkgrel=3
+pkgrel=4
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd"
@@ -24,9 +24,11 @@ options=('strip')
 validpgpkeys=('63CDA1E5D3FC22B998D20DD6327F26951A015CC4'  # Lennart Poettering <lennart@poettering.net>
               '5C251B5FC54EB2F80F407AAAC54CA336CFEB557E') # Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
 source=('git://github.com/systemd/systemd-stable.git'
-        'git://github.com/systemd/systemd.git') # pull in for tags, backports & reverts
+        'git://github.com/systemd/systemd.git'
+        'https://patch-diff.githubusercontent.com/raw/systemd/systemd/pull/8452.patch')
 sha256sums=('SKIP'
-            'SKIP')
+            'SKIP'
+            'df86589b27cb16c97bc749c33343b1d9ce6e5d2252fb4e6c184bcf7437a55f5d')
 
 _backports=(
   # core: do not free heap-allocated strings (#8391) (FS#57741)
@@ -98,6 +100,9 @@ prepare() {
   for _commit in "${_reverts[@]}"; do
     git revert -n "$_commit"
   done
+
+  # Use libmount in systemd-shutdown, add tests #8452 
+  patch -Np1 -i ../8452.patch
 }
 
 build() {
