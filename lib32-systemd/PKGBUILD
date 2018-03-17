@@ -10,7 +10,7 @@ _commit='738ab7502afb7663d9aacdd73e79025aa7cd0a9b'
 # Bump this to latest major release for signed tag verification,
 # the commit count is handled by pkgver() function.
 pkgver=238.0
-pkgrel=5
+pkgrel=6
 pkgdesc="system and service manager (32-bit)"
 arch=('x86_64')
 url="https://www.github.com/systemd/systemd"
@@ -110,7 +110,7 @@ build() {
   export CXX="g++ -m32"
   export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 
-  local timeservers=({0..3}.arch.pool.ntp.org)
+  local timeservers=({0..3}.manjaro.pool.ntp.org)
 
   local meson_options=(
     --libexecdir	/usr/lib32
