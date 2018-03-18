@@ -7,7 +7,7 @@ __arch_pkg_commit=4ac05111e37186cebac1c4fa22610abddb1c2d52
 
 pkgname=lib32-gtk3-classic
 pkgver=3.22.29
-pkgrel=1
+pkgrel=2
 pkgdesc="GTK3 library modified for classic GTK-based desktops."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 conflicts=(lib32-gtk3)
@@ -124,6 +124,7 @@ build() {
       --localstatedir=/var \
       --enable-x11-backend \
       --enable-wayland-backend \
+      --enable-broadway-backend \
       --disable-schemas-compile \
       --disable-gtk-doc-html \
       --disable-libcanberra
