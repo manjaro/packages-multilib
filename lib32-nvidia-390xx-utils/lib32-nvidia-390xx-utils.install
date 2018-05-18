@@ -14,17 +14,13 @@ msg() {
 	printf "${GREEN}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
-
-
 post_install() {
 	mhwd-gpu --check
 }
 
-
 post_upgrade() {
 	post_install
 }
-
 
 post_remove() {
 	mhwd-gpu --check

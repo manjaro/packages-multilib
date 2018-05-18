@@ -5,8 +5,8 @@
 _pkgbasename=nvidia-390xx-utils
 pkgbase=lib32-$_pkgbasename
 pkgname=('lib32-nvidia-390xx-utils' 'lib32-opencl-nvidia-390xx')
-pkgver=390.48
-pkgrel=1
+pkgver=390.59
+pkgrel=2
 arch=('x86_64')
 url="http://www.nvidia.com/"
 license=('custom')
@@ -17,7 +17,7 @@ _pkg="NVIDIA-Linux-${_arch}-${pkgver}"
 durl="http://us.download.nvidia.com/XFree86/Linux-x86/${pkgver}"
 #durl="http://developer.download.nvidia.com/assets/opengl/369.00"
 source=("${durl}/NVIDIA-Linux-x86-${pkgver}.run")
-sha256sums=('5115894ebb9d5d4c75c11e73a79093b7687328ebcf85d1de81a0edf41d14d6f8')
+sha256sums=('7a27c26e8985428b87ce7466e12d3f33e4b0e0b19a2584f8f3cedd9b2b762e37')
 
 create_links() {
     # create soname links
@@ -115,4 +115,3 @@ package_lib32-nvidia-390xx-utils() {
     mkdir -p "${pkgdir}/usr/share/licenses"
     ln -s $_pkgbasename "${pkgdir}/usr/share/licenses/${pkgname}"
 }
-
