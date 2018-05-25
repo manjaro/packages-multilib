@@ -8,7 +8,7 @@ __arch_pkg_commit=a97a4614dfdb3a2f0c97ed58f94385ecc9b16b1e
 _pkgname=lib32-gtk3
 pkgname=$_pkgname-classic
 pkgver=3.22.30
-pkgrel=0.1
+pkgrel=1
 pkgdesc="GTK3 library modified for classic GTK-based desktops."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 _archgit=https://git.archlinux.org/svntogit/community.git/plain/trunk
@@ -56,12 +56,15 @@ makedepends=(
 source=(
     # GTK source code.
     "https://download.gnome.org/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz"
+    # Temporary. Will be removed with next GTK3 release.
+    "upstream_window_background._patch::https://github.com/GNOME/gtk/commit/2ce63a86ba689aa41eb47409c889c469497478b0.patch"
     # ArchLinux hook.
     "gtk-query-immodules-3.0-32.hook::$_archgit/gtk-query-immodules-3.0-32.hook?h=packages/$_pkgname&id=$__arch_pkg_commit"
     # gtk3-mushrooms patches
     "git+$url.git#commit=$_commit"
 )
 sha256sums=('a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567'
+            '98b99ed14cc7545d1f30e244fe793ddd21a7db9d6f5e78b677113a89b621e459'
             '4ac8112ac7e6fa879756e1eeb89b5efa0825ba00e5b05469913b256f86a37608'
             'SKIP')
 
@@ -111,6 +114,9 @@ prepare() {
 
     # Apply patches to GTK code.
     __patch_gtk_code
+
+    # Temporary patch. Will be removed with next GTK3 release.
+    patch -p 1 -i "$srcdir/upstream_window_background._patch"
 
     NOCONFIGURE=1 ./autogen.sh
 }
