@@ -8,8 +8,8 @@ __arch_pkg_commit=a97a4614dfdb3a2f0c97ed58f94385ecc9b16b1e
 _pkgname=lib32-gtk3
 pkgname=$_pkgname-classic
 pkgver=3.22.30
-pkgrel=1
-pkgdesc="GTK3 library modified for classic GTK-based desktops."
+pkgrel=2
+pkgdesc="GTK3 patched for classic desktops like MATE/XFCE (see README)."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 _archgit=https://git.archlinux.org/svntogit/community.git/plain/trunk
 conflicts=($_pkgname)
@@ -17,12 +17,16 @@ provides=($_pkgname=$pkgver)
 arch=(x86_64)
 license=(LGPL)
 depends=(
+    adwaita-icon-theme
+    cantarell-fonts
     gtk3-classic
     lib32-at-spi2-atk
     lib32-colord
     lib32-dbus
+    lib32-dconf
     lib32-gdk-pixbuf2
     lib32-json-glib
+    lib32-libcanberra
     lib32-libcups
     lib32-libepoxy
     lib32-librsvg
@@ -36,15 +40,6 @@ depends=(
     lib32-pango
     lib32-rest
     lib32-wayland
-    )
-optdepends=(
-    'dconf: default GSettings backend'
-    'adwaita-icon-theme: default icon theme'
-    'cantarell-fonts: default font'
-    'libcanberra: sounds library'
-	'colord: for printing backends'
-	'rest: for printing backends'
-	'libcups: for printing backends'
     )
 makedepends=(
     'git'
