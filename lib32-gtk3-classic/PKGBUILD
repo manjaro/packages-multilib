@@ -2,13 +2,12 @@
 # Maintainer: Tomasz Gąsior <tomaszgasior.pl>
 
 _repo=gtk3-mushrooms
-_commit=37ca324e00372ebf9995e38bc363a06338ec974b
 __arch_pkg_commit=a97a4614dfdb3a2f0c97ed58f94385ecc9b16b1e
 
 _pkgname=lib32-gtk3
 pkgname=$_pkgname-classic
 pkgver=3.22.30
-pkgrel=2
+pkgrel=4
 pkgdesc="GTK3 patched for classic desktops like MATE/XFCE (see README)."
 url="https://github.com/TomaszGasior/gtk3-mushrooms"
 _archgit=https://git.archlinux.org/svntogit/community.git/plain/trunk
@@ -52,11 +51,11 @@ source=(
     # GTK source code.
     "https://download.gnome.org/sources/gtk+/${pkgver%.*}/gtk+-$pkgver.tar.xz"
     # Temporary. Will be removed with next GTK3 release.
-    "upstream_window_background._patch::https://github.com/GNOME/gtk/commit/2ce63a86ba689aa41eb47409c889c469497478b0.patch"
+    "upstream_window_background.patch::https://github.com/GNOME/gtk/commit/2ce63a86ba689aa41eb47409c889c469497478b0.patch"
     # ArchLinux hook.
     "gtk-query-immodules-3.0-32.hook::$_archgit/gtk-query-immodules-3.0-32.hook?h=packages/$_pkgname&id=$__arch_pkg_commit"
     # gtk3-mushrooms patches
-    "git+$url.git#commit=$_commit"
+    "git+$url.git"
 )
 sha256sums=('a1a4a5c12703d4e1ccda28333b87ff462741dc365131fbc94c218ae81d9a6567'
             '98b99ed14cc7545d1f30e244fe793ddd21a7db9d6f5e78b677113a89b621e459'
@@ -92,7 +91,7 @@ __patch_makefiles() {
 
 __patch_gtk_code() {
     for patch_file in $srcdir/$_repo/*.patch; do
-        patch -d "gtk" -p 3 -i "$patch_file"
+        patch -d "gtk" -p3 -i "$patch_file"
     done
 
     cat "$srcdir/$_repo/smaller-adwaita.css" | tee -a gtk/theme/Adwaita/gtk-contained{,-dark}.css > /dev/null
@@ -111,7 +110,7 @@ prepare() {
     __patch_gtk_code
 
     # Temporary patch. Will be removed with next GTK3 release.
-    patch -p 1 -i "$srcdir/upstream_window_background._patch"
+    patch -p1 -i "$srcdir/upstream_window_background.patch"
 
     NOCONFIGURE=1 ./autogen.sh
 }
