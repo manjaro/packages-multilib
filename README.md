@@ -1,7 +1,5 @@
-packages
-========
+This repo has been archived. Our code is now hosted at
 
-Manjaro Linux Multilib PKGBUILDS
+https://gitlab.manjaro.org/
 
-Many of this multilib PKGBUILDs come from alucryd repository (specially steam-manjaro dependencies):
-https://github.com/alucryd/aur-alucryd/tree/master/multilib
+See you there!
